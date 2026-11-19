@@ -4,6 +4,11 @@
   color: var(--color-text);
 }
 
+.flush {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .titleRow {
   display: flex;
   align-items: baseline;

@@ -11,7 +11,8 @@ import {
   type OptionDTO,
   type ProductFormInput,
 } from '@/lib/actions/admin/products.actions';
-import type { ProductStatus } from '@/types/product.types';
+import type { ProductGender, ProductStatus } from '@/types/product.types';
+import { PRODUCT_GENDER_OPTIONS } from '@/lib/product-gender';
 import formStyles from '@/components/checkout/checkoutForm.module.css';
 import styles from './ProductForm.module.css';
 import ImageUploadField from '@/components/admin/ImageUploadField/ImageUploadField';
@@ -75,6 +76,7 @@ export default function ProductForm({ product, categories, brands }: ProductForm
   const [status, setStatus] = useState<ProductStatus>(product?.status ?? 'ACTIVE');
   const [categorySlug, setCategorySlug] = useState(product?.categorySlug ?? categories[0]?.slug ?? '');
   const [brandSlug, setBrandSlug] = useState(product?.brandSlug ?? '');
+  const [gender, setGender] = useState<ProductGender>(product?.gender ?? 'UNISEX');
   const [badge, setBadge] = useState(product?.badge ?? '');
   const [description, setDescription] = useState(product?.description ?? '');
   const [shortDescription, setShortDescription] = useState(product?.shortDescription ?? '');
@@ -194,6 +196,7 @@ export default function ProductForm({ product, categories, brands }: ProductForm
       sku,
       stock: stockNumber,
       status,
+      gender,
       categorySlug,
       brandSlug: brandSlug || undefined,
       badge,
@@ -377,6 +380,17 @@ export default function ProductForm({ product, categories, brands }: ProductForm
               {brands.map((brand) => (
                 <option key={brand.slug} value={brand.slug}>
                   {brand.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className={formStyles.field}>
+            <span className={formStyles.label}>Género</span>
+            <select value={gender} onChange={(e) => setGender(e.target.value as ProductGender)} className={formStyles.input}>
+              {PRODUCT_GENDER_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>

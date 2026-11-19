@@ -4,3 +4,53 @@
   gap: 1.5rem;
   padding: 0 clamp(1.5rem, 5vw, 4rem) clamp(3rem, 8vw, 6rem);
 }
+
+/*
+ * Con barra lateral: la cabecera (titulo + ordenar) y los resultados van en
+ * la columna derecha, asi el titulo queda alineado con el primer producto.
+ * La barra lateral ocupa la columna izquierda, justo debajo del titulo.
+ */
+.withSidebar {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-areas:
+    '. header'
+    'sidebar content';
+  column-gap: clamp(1.5rem, 3vw, 2.5rem);
+  row-gap: 0;
+  align-items: start;
+}
+
+.header {
+  grid-area: header;
+  min-width: 0;
+}
+
+/*
+ * Contenedor de StaticSidebar (que gestiona el comportamiento fijo): tiene
+ * que ocupar todo el alto de la fila para que el sticky interno tenga recorrido.
+ */
+.sidebar {
+  grid-area: sidebar;
+  align-self: stretch;
+}
+
+.content {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+@media (max-width: 800px) {
+  .withSidebar {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'header'
+      'sidebar'
+      'content';
+    row-gap: 1rem;
+  }
+
+}

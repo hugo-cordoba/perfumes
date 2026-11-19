@@ -6,7 +6,8 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { ensureUniqueSlug, slugify } from '@/lib/slugify';
 import { parsePriceToNumber, toPriceString } from '@/lib/currency';
 import { runAdminAction, type AdminActionResult } from './admin-utils';
-import type { ProductStatus } from '@/types/product.types';
+import type { ProductGender, ProductStatus } from '@/types/product.types';
+import { PRODUCT_GENDER_OPTIONS } from '@/lib/product-gender';
 import { TAX_RATE_OPTIONS } from '@/lib/tax';
 
 /* ---------- Listado ---------- */
@@ -155,6 +156,7 @@ export interface AdminProductDetail {
   sku: string;
   stock: number;
   status: ProductStatus;
+  gender: ProductGender;
   categorySlug: string;
   brandSlug: string;
   badge: string;
@@ -183,6 +185,7 @@ export async function getAdminProductById(id: string): Promise<AdminProductDetai
     sku: row.sku,
     stock: row.stock,
     status: row.status as ProductStatus,
+    gender: row.gender as ProductGender,
     categorySlug: row.categorySlug,
     brandSlug: row.brandSlug ?? '',
     badge: row.badge ?? '',
@@ -207,6 +210,7 @@ export interface ProductFormInput {
   sku: string;
   stock: number;
   status: ProductStatus;
+  gender: ProductGender;
   categorySlug: string;
   brandSlug?: string;
   badge?: string;
@@ -215,6 +219,9 @@ export interface ProductFormInput {
 }
 
 function validateProductInput(input: ProductFormInput): void {
+  if (!PRODUCT_GENDER_OPTIONS.some((option) => option.value === input.gender)) {
+    throw new Error('Selecciona un género válido.');
+  }
   if (!input.name.trim()) throw new Error('El nombre es obligatorio.');
   if (!input.sku.trim()) throw new Error('El SKU es obligatorio.');
   if (!input.categorySlug) throw new Error('Selecciona una categoría.');
@@ -285,6 +292,7 @@ export async function createProductAction(input: ProductFormInput): Promise<Admi
         sku: input.sku.trim(),
         stock: input.stock,
         status: input.status,
+        gender: input.gender,
         categorySlug: input.categorySlug,
         brandSlug: input.brandSlug || null,
         badge: input.badge?.trim() || null,
@@ -342,6 +350,7 @@ export async function updateProductAction(
           sku: input.sku.trim(),
           stock: input.stock,
           status: input.status,
+          gender: input.gender,
           categorySlug: input.categorySlug,
           brandSlug: input.brandSlug || null,
           badge: input.badge?.trim() || null,

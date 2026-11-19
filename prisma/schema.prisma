@@ -62,6 +62,14 @@ enum ProductStatus {
   ARCHIVED
 }
 
+/// Público al que va dirigido el perfume. UNISEX aparece tanto al filtrar
+/// por Hombre como por Mujer.
+enum Gender {
+  MEN
+  WOMEN
+  UNISEX
+}
+
 model Product {
   id                 String        @id @default(cuid())
   slug               String        @unique
@@ -77,6 +85,7 @@ model Product {
   sku                String        @unique
   stock              Int           @default(0)
   status             ProductStatus @default(ACTIVE)
+  gender             Gender        @default(UNISEX)
 
   categorySlug       String
   category           Category      @relation(fields: [categorySlug], references: [slug])

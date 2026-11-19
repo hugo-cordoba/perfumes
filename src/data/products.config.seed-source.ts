@@ -9,6 +9,12 @@ export const productBrands = [
   { slug: 'techpro', label: 'TechPro' },
   { slug: 'stylemate', label: 'StyleMate' },
   { slug: 'homeessentials', label: 'Home Essentials' },
+  // Marcas de relleno hasta tener las reales (se muestran en la barra lateral de /products)
+  { slug: 'marca-1', label: 'Marca 1' },
+  { slug: 'marca-2', label: 'Marca 2' },
+  { slug: 'marca-3', label: 'Marca 3' },
+  { slug: 'marca-4', label: 'Marca 4' },
+  { slug: 'marca-5', label: 'Marca 5' },
 ];
 
 export const products = [

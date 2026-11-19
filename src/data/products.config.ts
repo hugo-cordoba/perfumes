@@ -22,6 +22,7 @@ function toProductDetail(p: any): ProductDetail {
     sku: p.sku,
     stock: p.stock,
     status: p.status,
+    gender: p.gender,
     relatedIds: p.relatedIds,
     variants: p.variantGroups?.map((g: any) => ({
       id: g.id,

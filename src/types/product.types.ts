@@ -49,6 +49,9 @@ export interface ProductVariantGroup {
 
 export type ProductStatus = 'ACTIVE' | 'ARCHIVED';
 
+/** Público objetivo del perfume. `UNISEX` aparece al filtrar por Hombre y por Mujer. */
+export type ProductGender = 'MEN' | 'WOMEN' | 'UNISEX';
+
 export interface ProductDetail extends Product {
   images: string[];
   description: string;
@@ -61,6 +64,7 @@ export interface ProductDetail extends Product {
   sku: string;
   stock: number;
   status: ProductStatus;
+  gender: ProductGender;
   variants?: ProductVariantGroup[];
   relatedIds?: string[];
 }

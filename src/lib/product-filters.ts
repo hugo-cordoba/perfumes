@@ -1,4 +1,5 @@
 import type { ProductDetail } from '@/types/product.types';
+import { GENDER_FILTER_OPTIONS, GENDER_FILTER_TO_DB, type GenderFilter } from '@/lib/product-gender';
 import { parsePriceToNumber } from '@/lib/currency';
 import { isInStock } from '@/data/products.config';
 
@@ -17,6 +18,10 @@ const SORT_OPTIONS: SortOption[] = ['relevance', 'price-asc', 'price-desc', 'nam
 
 export interface ProductFilterState {
   sort: SortOption;
+  /** Generos marcados. Vacio = sin filtrar. Un producto UNISEX encaja con cualquiera. */
+  genders: GenderFilter[];
+  /** Slug de marca (`?brand=`). */
+  brandSlug?: string;
   minPrice?: number;
   maxPrice?: number;
   inStockOnly: boolean;
@@ -33,7 +38,7 @@ export interface FilterGroup {
 type SearchParams = { [key: string]: string | string[] | undefined };
 
 /** Claves que no representan un grupo de variante y no deben tratarse como tal. */
-const RESERVED_KEYS = new Set(['sort', 'minPrice', 'maxPrice', 'inStock', 'q']);
+const RESERVED_KEYS = new Set(['sort', 'minPrice', 'maxPrice', 'inStock', 'q', 'gender', 'brand', 'page']);
 
 function firstValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -54,8 +59,14 @@ export function parseFilterParams(searchParams: SearchParams): ProductFilterStat
     variantSelections[key] = raw.split(',').filter(Boolean);
   }
 
+  const genders = (firstValue(searchParams.gender) ?? '')
+    .split(',')
+    .filter((value): value is GenderFilter => GENDER_FILTER_OPTIONS.some((option) => option.value === value));
+
   return {
     sort,
+    genders: Array.from(new Set(genders)),
+    brandSlug: firstValue(searchParams.brand) || undefined,
     minPrice: Number.isFinite(minPriceRaw) ? minPriceRaw : undefined,
     maxPrice: Number.isFinite(maxPriceRaw) ? maxPriceRaw : undefined,
     inStockOnly: firstValue(searchParams.inStock) === '1',
@@ -97,6 +108,12 @@ export function filterAndSortProducts(products: ProductDetail[], filters: Produc
     if (filters.minPrice !== undefined && price < filters.minPrice) return false;
     if (filters.maxPrice !== undefined && price > filters.maxPrice) return false;
     if (filters.inStockOnly && !isInStock(product)) return false;
+    if (filters.brandSlug && product.brandSlug !== filters.brandSlug) return false;
+
+    if (filters.genders.length > 0 && product.gender !== 'UNISEX') {
+      const allowed = filters.genders.map((gender) => GENDER_FILTER_TO_DB[gender]);
+      if (!allowed.includes(product.gender)) return false;
+    }
 
     for (const [groupId, selected] of Object.entries(filters.variantSelections)) {
       if (selected.length === 0) continue;
