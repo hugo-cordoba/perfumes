@@ -2,9 +2,30 @@ import Image from 'next/image';
 import Button from '@/components/ui/Button/Button';
 import { siteConfig } from '@/config/site.config';
 import type { HeroProps } from '@/types/section.types';
+import HeroPanel from './HeroPanel';
 import styles from './Hero.module.css';
 
-export default function Hero({ eyebrow, title, subtitle, media, ctaLabel, ctaHref, navLinks }: HeroProps) {
+export default function Hero({ eyebrow, title, subtitle, media, ctaLabel, ctaHref, navLinks, panels }: HeroProps) {
+  // Variante dividida: un panel enlazado por cada propuesta (p. ej. "Para el" / "Para ella").
+  if (panels && panels.length > 0 && media.type === 'image') {
+    return (
+      <section className={styles.split}>
+        {/* El titulo se mantiene en el DOM para SEO y lectores de pantalla. */}
+        <h1 className={styles.srOnly}>{title}</h1>
+
+        {panels.map((panel, index) => (
+          <HeroPanel
+            key={panel.id}
+            {...panel}
+            image={media.src}
+            aspectRatio={media.aspectRatio ?? 16 / 9}
+            index={index}
+          />
+        ))}
+      </section>
+    );
+  }
+
   return (
     <header className={styles.hero}>
       {media.type === 'video' ? (

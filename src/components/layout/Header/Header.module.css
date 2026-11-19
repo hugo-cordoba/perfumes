@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.25rem;
+  gap: 1.1rem;
 }
 
 .iconButton {
@@ -63,10 +63,6 @@
   text-align: center;
 }
 
-.mobileOnly {
-  display: none;
-}
-
 .menuButton {
   position: relative;
   display: flex;
@@ -86,8 +82,8 @@
 .menuIcon::after {
   content: '';
   display: block;
-  width: 19px;
-  height: 1.2px;
+  width: 22px;
+  height: 1.6px;
   background-color: var(--color-text);
   /* Transiciona posicion, rotacion y color -> es lo que anima
      de "hamburguesa" a "X" */
@@ -105,11 +101,11 @@
 }
 
 .menuIcon::before {
-  top: -6px;
+  top: -7px;
 }
 
 .menuIcon::after {
-  top: 6px;
+  top: 7px;
 }
 
 /* Estado abierto: la linea central desaparece y las otras dos
@@ -130,16 +126,25 @@
 
 .logo {
   justify-self: center;
-  font-family: var(--font-heading);
-  font-size: 1.6em;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.04em;
+  font-family: var(--font-logo), var(--font-heading), serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.06em;
   text-decoration: none;
   color: var(--color-text);
   white-space: nowrap;
 
-  transform: scaleX(1.2) scaleY(1.5);
+  /*
+   * Centrado optico, medido sobre Cinzel Decorative:
+   * - Vertical: con line-height 1 las letras (mayusculas de 0.72em) quedan
+   *   0.055em por encima del centro de la caja; se bajan para que su centro
+   *   coincida con el de los iconos.
+   * - Horizontal: letter-spacing anade espacio tras la ultima letra; el mismo
+   *   valor como padding-left equilibra la caja y centra el texto de verdad.
+   */
+  padding-left: 0.06em;
+  transform: translateY(0.055em);
 }
 
 .cartTrigger {
@@ -154,7 +159,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.1rem;
 }
 
 .actionLink {
@@ -302,12 +307,6 @@
 }
 
 @media (max-width: 640px) {
-  .mobileOnly {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .side,
   .actions {
     gap: 0.8rem;
@@ -323,12 +322,10 @@
     border-radius: 999px;
   }
 
-  .hideOnMobile {
-    display: none;
-  }
-
   .logo {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    padding-left: 0.04em; /* = letter-spacing, ver .logo base */
   }
 
   .sidebar {
@@ -354,4 +351,47 @@
   0% { transform: scale(1); }
   35% { transform: scale(1.18); color: var(--color-primary); }
   100% { transform: scale(1); }
+}
+
+/* Iconos de accion del navbar (buscar, cuenta, cesta): area tactil de 40px+ */
+.iconAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem;
+  margin: -0.65rem;
+  color: var(--color-text);
+  text-decoration: none;
+  line-height: 0;
+}
+
+.iconAction:hover {
+  color: var(--color-text-muted);
+}
+
+/* Evita que la animacion de la cesta cambie el display y desplace el icono. */
+.iconAction.bump {
+  display: inline-flex;
+}
+
+.iconAction[aria-current='page'],
+.iconAction[aria-expanded='true'] {
+  color: var(--color-primary);
+}
+
+/*
+ * Visibilidad por tamano: escritorio = menu a la izquierda y buscar, cuenta y
+ * cesta a la derecha; movil = menu + buscar a la izquierda, cuenta + cesta a
+ * la derecha. Va al final con !important para ganar a .iconAction (display).
+ */
+@media (min-width: 641px) {
+  .mobileOnly {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .desktopOnly {
+    display: none !important;
+  }
 }

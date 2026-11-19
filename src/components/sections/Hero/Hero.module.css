@@ -95,3 +95,56 @@
     display: none;
   }
 }
+
+/* ---------- Variante dividida (paneles enlazados) ---------- */
+
+.split {
+  position: relative;
+  display: flex;
+  height: clamp(520px, 82vh, 820px);
+  overflow: hidden;
+  background-color: #e9dfd3;
+}
+
+/* Hairline entre paneles. */
+.split > a + a {
+  border-left: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+/* Al pasar por un panel, el otro se atenua para guiar la mirada. */
+@media (hover: hover) {
+  .split:has(> a:hover) > a:not(:hover) {
+    filter: brightness(0.9) saturate(0.8);
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .split {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .split > a {
+    flex: none;
+    /* Casi cuadrado: el frasco se ve grande y cabe el texto al lado. */
+    height: clamp(380px, 100vw, 520px);
+  }
+
+  .split > a + a {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.55);
+  }
+}
+

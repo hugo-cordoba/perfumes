@@ -6,6 +6,46 @@ export interface NavLink {
   href: string;
 }
 
+/**
+ * Panel de un hero dividido (p. ej. "Para el" / "Para ella"). Cada panel
+ * recorta una mitad de `media.src` y es un enlace a su seccion.
+ */
+export interface HeroPanel {
+  id: string;
+  eyebrow?: string;
+  title: string;
+  ctaLabel: string;
+  href: string;
+  /**
+   * Donde queda el centro del frasco dentro del panel (% del ancho; 50 =
+   * centrado). El encuadre se calcula solo, asi que el frasco queda
+   * exactamente ahi con cualquier tamano de pantalla.
+   */
+  center?: number;
+  /**
+   * Igual que `center`, en movil (paneles apilados). Por defecto 66: frasco a
+   * la derecha y texto libre a la izquierda.
+   */
+  centerMobile?: number;
+  /**
+   * Capa del frasco: imagen PNG/WebP con fondo transparente y MISMAS
+   * dimensiones que `media.src`, para que encajen sin calcular nada.
+   * Es lo unico que se anima; el fondo se queda estatico.
+   */
+  bottle?: {
+    src: string;
+    /**
+     * Punto de apoyo del frasco (% de la imagen): baseX es su centro
+     * horizontal (se usa para centrarlo) y, junto a baseY, el origen del
+     * zoom y de la sombra.
+     */
+    baseX: number;
+    baseY: number;
+    /** Ancho del frasco (% de la imagen), para dimensionar la sombra. */
+    width: number;
+  };
+}
+
 export interface HeroProps {
   eyebrow?: string;
   title: string;
@@ -14,10 +54,17 @@ export interface HeroProps {
     type: 'image' | 'video';
     src: string;
     poster?: string;
+    /** Ancho / alto de la imagen. Solo se usa en la variante con `panels`. */
+    aspectRatio?: number;
   };
   ctaLabel?: string;
   ctaHref?: string;
   navLinks?: NavLink[];
+  /**
+   * Si se informa, el hero se pinta dividido en paneles enlazados
+   * (solo con media.type = 'image') en lugar del layout clasico.
+   */
+  panels?: HeroPanel[];
 }
 
 export interface SplitIntroProps {

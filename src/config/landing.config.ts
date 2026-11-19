@@ -29,16 +29,37 @@ export const landingSections: SectionConfig[] = [
     id: 'hero',
     type: 'hero',
     props: {
-      eyebrow: 'Nueva coleccion',
-      title: 'Tu Marca',
-      subtitle:
-        'Descripcion breve y clara de la propuesta de valor. Sustituye este texto por el del cliente.',
+      title: 'Descubre tu fragancia',
       media: {
         type: 'image',
-        src: '/banner.png',
+        // Fondo ESTATICO sin frascos (/public/banner-bg.webp). Los frascos
+        // son capas transparentes del mismo tamaño (banner-left/right.webp).
+        // Original completo en /design/banner-original.png.
+        src: '/banner-bg.webp',
+        aspectRatio: 2048 / 768,
       },
-      ctaLabel: 'Ver catalogo',
-      ctaHref: '#productos',
+      // Cada panel recorta una parte del banner y centra su frasco (por defecto
+      // en el centro del panel; ver `center` / `centerMobile`). `bottle` es la
+      // capa animada (baseX/baseY/width en % de la imagen: punto de apoyo y
+      // ancho del frasco).
+      panels: [
+        {
+          id: 'para-el',
+          eyebrow: 'Fragancias',
+          title: 'Para él',
+          ctaLabel: 'Descubrir',
+          href: '/category/hombre',
+          bottle: { src: '/banner-left.webp', baseX: 28.1, baseY: 89.1, width: 15.7 },
+        },
+        {
+          id: 'para-ella',
+          eyebrow: 'Fragancias',
+          title: 'Para ella',
+          ctaLabel: 'Descubrir',
+          href: '/category/mujer',
+          bottle: { src: '/banner-right.webp', baseX: 77, baseY: 91.8, width: 11.6 },
+        },
+      ],
     },
   },
   {

@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Search, ShoppingBag, User } from 'lucide-react';
+import { CircleUserRound, Search, ShoppingBag } from 'lucide-react';
 import type { NavLink } from '@/types/section.types';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
@@ -13,6 +13,10 @@ import CartSidebar from '@/components/cart/CartSidebar/CartSidebar';
 import SearchDropdown from '@/components/product/SearchDropdown/SearchDropdown';
 import styles from './Header.module.css';
 import { usePathname } from 'next/navigation';
+
+/** Todos los iconos del navbar comparten tamano y grosor para que queden iguales. */
+const ICON_SIZE = 22;
+const ICON_STROKE = 1.75;
 
 interface HeaderProps {
   siteName: string;
@@ -47,9 +51,7 @@ export default function Header({
   const { user, hydrated: authHydrated } = useAuth();
   const displayCartCount = cartCount ?? itemCount;
   const prevCartCountRef = useRef(displayCartCount);
-  const prevWishlistCountRef = useRef(wishlistItemCount);
   const [cartBump, setCartBump] = useState(false);
-  const [wishlistBump, setWishlistBump] = useState(false);
   const pathname = usePathname();
   const isSearchPage = pathname === '/search';
   const anyPanelOpen = searchOpen || authOpen || cartOpen;
@@ -58,11 +60,6 @@ export default function Header({
     if (displayCartCount > prevCartCountRef.current) setCartBump(true);
     prevCartCountRef.current = displayCartCount;
   }, [displayCartCount]);
-
-  useEffect(() => {
-    if (wishlistItemCount > prevWishlistCountRef.current) setWishlistBump(true);
-    prevWishlistCountRef.current = wishlistItemCount;
-  }, [wishlistItemCount]);
 
   useEffect(() => {
     document.documentElement.style.overflow = menuOpen || authOpen || searchOpen || cartOpen ? 'hidden' : '';
@@ -163,12 +160,12 @@ export default function Header({
           <button
             type="button"
             onClick={toggleSearch}
-            className={`${styles.iconButton} ${styles.mobileOnly} ${isSearchPage && !anyPanelOpen ? styles.actionButtonActive : ''}`}
+            className={`${styles.iconButton} ${styles.iconAction} ${styles.mobileOnly} ${isSearchPage && !anyPanelOpen ? styles.actionButtonActive : ''}`}
             aria-expanded={searchOpen}
             aria-controls="search-dropdown"
             aria-label={searchLabel}
           >
-            <Search size={20} aria-hidden="true" />
+            <Search size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden="true" />
           </button>
         </div>
 
@@ -177,64 +174,51 @@ export default function Header({
         </Link>
 
         <div className={styles.actions}>
+          {/* Escritorio: el buscador va a la derecha. En movil pasa a la izquierda (2 + 2 iconos). */}
           <button
             type="button"
             onClick={toggleSearch}
-            className={`${styles.actionButton} ${styles.hideOnMobile} ${isSearchPage && !anyPanelOpen ? styles.actionButtonActive : ''}`}
+            className={`${styles.iconButton} ${styles.iconAction} ${styles.desktopOnly} ${isSearchPage && !anyPanelOpen ? styles.actionButtonActive : ''}`}
             aria-expanded={searchOpen}
             aria-controls="search-dropdown"
             aria-current={isSearchPage && !anyPanelOpen ? 'page' : undefined}
+            aria-label={searchLabel}
           >
-            {searchLabel}
+            <Search size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden="true" />
           </button>
 
           {authHydrated && user ? (
             <Link
               href="/account"
-              className={styles.actionLink}
+              className={`${styles.iconButton} ${styles.iconAction}`}
               aria-current={pathname === '/account' && !anyPanelOpen ? 'page' : undefined}
-              aria-label={user.fullName.split(' ')[0]}
+              aria-label={`Mi cuenta (${user.fullName.split(' ')[0]})`}
             >
-              <User size={20} className={styles.mobileOnly} aria-hidden="true" />
-              <span className={styles.hideOnMobile}>{user.fullName.split(' ')[0]}</span>
+              <CircleUserRound size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden="true" />
             </Link>
           ) : (
             <button
               type="button"
               onClick={openAuth}
-              className={styles.actionButton}
+              className={`${styles.iconButton} ${styles.iconAction}`}
               aria-expanded={authOpen}
               aria-label={loginLabel}
             >
-              <User size={20} className={styles.mobileOnly} aria-hidden="true" />
-              <span className={styles.hideOnMobile}>{loginLabel}</span>
+              <CircleUserRound size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden="true" />
             </button>
           )}
-
-          <Link
-            href={wishlistHref}
-            className={`${styles.actionLink} ${styles.hideOnMobile} ${wishlistBump ? styles.bump : ''}`}
-            onClick={handleWishlistClick}
-            onAnimationEnd={() => setWishlistBump(false)}
-            aria-current={pathname === wishlistHref && !anyPanelOpen ? 'page' : undefined}
-          >
-            {wishlistLabel} ({wishlistItemCount})
-          </Link>
 
           <button
             type="button"
             onClick={openCart}
-            className={`${styles.actionLink} ${styles.cartTrigger} ${cartBump ? styles.bump : ''}`}
+            className={`${styles.iconButton} ${styles.iconAction} ${styles.cartTrigger} ${cartBump ? styles.bump : ''}`}
             onAnimationEnd={() => setCartBump(false)}
             aria-expanded={cartOpen}
             aria-label={`${cartLabel} (${displayCartCount})`}
           >
-            <span className={`${styles.iconWrapper} ${styles.mobileOnly}`}>
-              <ShoppingBag size={20} aria-hidden="true" />
+            <span className={styles.iconWrapper}>
+              <ShoppingBag size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden="true" />
               {displayCartCount > 0 && <span className={styles.badge}>{displayCartCount}</span>}
-            </span>
-            <span className={styles.hideOnMobile}>
-              {cartLabel} ({displayCartCount})
             </span>
           </button>
         </div>
