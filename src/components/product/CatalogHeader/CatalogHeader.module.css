@@ -53,16 +53,14 @@
   margin-bottom: 0;
 }
 
-/* Misma tipografia que el logotipo de la cabecera (Cinzel Decorative 700).
-   Sin text-transform: con el texto en minusculas/mayusculas tal cual, la fuente
-   saca las iniciales grandes y decoradas, igual que en "Pura Esencia". */
+/* Misma tipografia que el resto de titulos de la web (--font-heading). */
 .header[data-variant='catalog'] .title {
-  font-family: var(--font-logo), var(--font-heading), serif;
+  font-family: var(--font-heading);
   font-size: var(--catalog-title-size, clamp(1.9rem, 3.4vw, 3.25rem));
   font-weight: 700;
   line-height: 1.1;
-  letter-spacing: -0.005em;
-  text-transform: none;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   text-wrap: balance;
 }
 

@@ -22,7 +22,7 @@
 
   /* Los usan CatalogHeader (titulo) y la barra lateral (para alinearse con el titulo) */
   --catalog-title-size: clamp(1.9rem, 3.4vw, 3.25rem);
-  --catalog-header-pt: clamp(2.25rem, 4.5vw, 4rem);
+  --catalog-header-pt: clamp(1.25rem, 2.2vw, 2rem);
 
   display: grid;
   grid-template-columns: var(--catalog-rail) minmax(0, 1fr);

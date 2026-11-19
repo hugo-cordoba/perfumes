@@ -48,7 +48,7 @@ export const landingSections: SectionConfig[] = [
           eyebrow: 'Fragancias',
           title: 'Para él',
           ctaLabel: 'Descubrir',
-          href: '/category/hombre',
+          href: '/products?gender=men',
           bottle: { src: '/banner-left.webp', baseX: 28.1, baseY: 89.1, width: 15.7 },
         },
         {
@@ -56,7 +56,7 @@ export const landingSections: SectionConfig[] = [
           eyebrow: 'Fragancias',
           title: 'Para ella',
           ctaLabel: 'Descubrir',
-          href: '/category/mujer',
+          href: '/products?gender=women',
           bottle: { src: '/banner-right.webp', baseX: 77, baseY: 91.8, width: 11.6 },
         },
       ],
