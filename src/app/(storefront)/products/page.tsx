@@ -46,7 +46,14 @@ export default async function AllProductsPage({ searchParams }: AllProductsPageP
     <>
       <Suspense fallback={null}>
         <ProductCatalog
-          header={<CatalogHeader flush title={title} actions={<ProductFilters />} />}
+          header={
+            <CatalogHeader
+              variant="catalog"
+              title={title}
+              resultsCount={filteredProducts.length}
+              actions={<ProductFilters />}
+            />
+          }
           products={pagedProducts}
           resultsCount={filteredProducts.length}
           emptyMessage="No hay productos que coincidan con estos filtros."

@@ -8,31 +8,54 @@
 /*
  * Con barra lateral: la cabecera (titulo + ordenar) y los resultados van en
  * la columna derecha, asi el titulo queda alineado con el primer producto.
- * La barra lateral ocupa la columna izquierda, justo debajo del titulo.
+ * La barra lateral ocupa la columna izquierda, a la altura del titulo.
+ *
+ * - El margen izquierdo de la barra es el mismo que el de la cabecera del
+ *   sitio (menu hamburguesa), para que queden alineados en vertical.
+ * - La rejilla llega hasta el borde derecho de la ventana (sin padding).
  */
 .withSidebar {
+  --catalog-gutter: clamp(0.75rem, 2.5vw, 1.5rem);
+  --catalog-rail: clamp(12rem, 14vw, 16.5rem);
+  --catalog-rail-gap: clamp(1rem, 2vw, 1.75rem); /* aire entre la barra y la rejilla */
+  --catalog-text: clamp(0.78rem, 0.675rem + 0.17vw, 0.875rem);
+
+  /* Los usan CatalogHeader (titulo) y la barra lateral (para alinearse con el titulo) */
+  --catalog-title-size: clamp(1.9rem, 3.4vw, 3.25rem);
+  --catalog-header-pt: clamp(2.25rem, 4.5vw, 4rem);
+
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-columns: var(--catalog-rail) minmax(0, 1fr);
   grid-template-areas:
-    '. header'
+    'sidebar header'
     'sidebar content';
-  column-gap: clamp(1.5rem, 3vw, 2.5rem);
+  column-gap: 0;
   row-gap: 0;
   align-items: start;
+  padding: 0 0 clamp(3rem, 8vw, 6rem);
 }
 
 .header {
   grid-area: header;
   min-width: 0;
+  padding-right: var(--catalog-gutter);
 }
 
 /*
- * Contenedor de StaticSidebar (que gestiona el comportamiento fijo): tiene
- * que ocupar todo el alto de la fila para que el sticky interno tenga recorrido.
+ * Reserva la columna izquierda de la rejilla (las dos filas: titulo y
+ * resultados). El contenido en si (StaticSidebar) va con position: fixed.
+ *
+ * El padding-top lo coloca a la altura del titulo: padding de la cabecera +
+ * hueco entre el borde de la linea del titulo y la parte alta de sus
+ * mayusculas (0.22em), menos el hueco equivalente de la etiqueta "Genero"
+ * (11px). Asi las dos mayusculas quedan a la misma altura. StaticSidebar
+ * mide este punto para fijar la barra exactamente ahi.
  */
 .sidebar {
   grid-area: sidebar;
   align-self: stretch;
+  padding: calc(var(--catalog-header-pt) + var(--catalog-title-size) * 0.22 - 0.17rem)
+    var(--catalog-rail-gap) 0 var(--catalog-gutter);
 }
 
 .content {
@@ -45,12 +68,30 @@
 
 @media (max-width: 800px) {
   .withSidebar {
+    /* El titulo se ajusta al ancho de la pantalla para que "Todos los productos"
+       quepa siempre en una linea: mide ~13.4em, asi que tamaño = ancho util / 13.6.
+       Tope de 1.9rem = el minimo de escritorio, para que no haya salto al cruzar
+       el breakpoint. */
+    --catalog-title-size: clamp(1.1rem, calc((100vw - 2 * var(--catalog-gutter)) / 13.6), 1.9rem);
+    --catalog-header-pt: 1.75rem;
+
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       'header'
       'sidebar'
       'content';
-    row-gap: 1rem;
   }
 
+  .header {
+    padding-left: var(--catalog-gutter);
+  }
+
+  .sidebar {
+    padding: 0 var(--catalog-gutter);
+    margin-bottom: 1.75rem;
+  }
+
+  .content {
+    padding: 0 var(--catalog-gutter);
+  }
 }

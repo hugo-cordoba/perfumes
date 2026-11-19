@@ -8,6 +8,8 @@ interface PaginationProps {
   totalPages: number;
   pathname: string;
   searchParams: SearchParams;
+  /** `catalog`: botones cuadrados y tipografia en mayusculas, a juego con la rejilla del listado. */
+  variant?: 'default' | 'catalog';
 }
 
 function buildHref(pathname: string, searchParams: SearchParams, page: number): string {
@@ -40,7 +42,13 @@ function getPageNumbers(current: number, total: number): (number | 'ellipsis')[]
   return result;
 }
 
-export default function Pagination({ currentPage, totalPages, pathname, searchParams }: PaginationProps) {
+export default function Pagination({
+  currentPage,
+  totalPages,
+  pathname,
+  searchParams,
+  variant = 'default',
+}: PaginationProps) {
   if (totalPages <= 1) return null;
 
   const pageNumbers = getPageNumbers(currentPage, totalPages);
@@ -48,7 +56,7 @@ export default function Pagination({ currentPage, totalPages, pathname, searchPa
   const isLastPage = currentPage === totalPages;
 
   return (
-    <nav className={styles.pagination} aria-label="Paginación de resultados">
+    <nav className={styles.pagination} data-variant={variant} aria-label="Paginación de resultados">
       <Link
         href={buildHref(pathname, searchParams, Math.max(1, currentPage - 1))}
         className={`${styles.navLink} ${isFirstPage ? styles.disabled : ''}`}

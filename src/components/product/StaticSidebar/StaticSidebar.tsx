@@ -10,19 +10,18 @@ const FALLBACK_TOP = 96; // px, solo hasta que se mide
 
 interface StaticSidebarProps {
   children: ReactNode;
-  /** Clase del contenedor externo (le da el `grid-area` y debe dejarlo estirarse a todo el alto de la fila). */
+  /** Clase del contenedor externo: le da el `grid-area` y (opcional) el padding-top que fija la altura de la barra. */
   className?: string;
 }
 
 /**
- * Barra lateral completamente fija: queda clavada donde aparece al cargar la
- * pagina y no se mueve al hacer scroll.
+ * Barra lateral completamente fija: queda clavada a la altura donde aparece al
+ * cargar la pagina (alineada con el titulo) y no se mueve nunca, tampoco al
+ * llegar al final de la pagina.
  *
- * Con `position: sticky` y un `top` fijo a ojo, la barra se desplaza un poco
- * hasta alcanzar ese `top`. Aqui medimos donde cae de forma natural (debajo de
- * la cabecera y del titulo) y usamos exactamente esa posicion como `top`,
- * asi que nunca llega a moverse. El contenedor externo ocupa toda la fila de
- * la rejilla para que el sticky tenga recorrido.
+ * Usa `position: fixed` y medimos donde cae de forma natural (debajo de la
+ * cabecera, a la altura del titulo) para usar esa posicion como `top`. El
+ * contenedor externo solo reserva la columna en la rejilla.
  */
 export default function StaticSidebar({ children, className }: StaticSidebarProps) {
   const outerRef = useRef<HTMLDivElement>(null);
@@ -33,8 +32,11 @@ export default function StaticSidebar({ children, className }: StaticSidebarProp
     if (!outer) return;
 
     function measure() {
-      // Posicion natural en el documento (independiente del scroll actual).
-      const natural = Math.round(outer!.getBoundingClientRect().top + window.scrollY);
+      // Posicion natural del contenido en el documento (independiente del
+      // scroll actual). El contenedor externo tiene padding-top: el contenido
+      // nace debajo de el, asi que hay que sumarlo.
+      const paddingTop = parseFloat(getComputedStyle(outer!).paddingTop) || 0;
+      const natural = Math.round(outer!.getBoundingClientRect().top + window.scrollY + paddingTop);
       setTop(Math.max(0, natural));
     }
 
@@ -52,7 +54,7 @@ export default function StaticSidebar({ children, className }: StaticSidebarProp
 
   return (
     <div ref={outerRef} className={className}>
-      {/* -4px: compensa el margin negativo de .inner, para que no haya ni un pixel de desplazamiento */}
+      {/* -4px: .inner tiene 4px de padding (hueco para el outline de foco); asi el contenido queda exactamente en `natural` */}
       <div className={styles.inner} style={{ top: top - 4, maxHeight: `calc(100vh - ${top - 4}px - 1rem)` }}>
         {children}
       </div>

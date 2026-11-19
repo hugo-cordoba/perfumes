@@ -16,6 +16,59 @@
   font-size: 0.95rem;
 }
 
+/* Variante catalog: tarjetas casi pegadas (4px) y mas aire entre filas */
+.grid[data-variant='catalog'] {
+  gap: clamp(2.5rem, 3.4vw, 3.75rem) 4px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: clamp(2rem, 6vw, 4.5rem) clamp(0.75rem, 2.5vw, 1.5rem) clamp(2rem, 6vw, 4.5rem) 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.emptyTitle {
+  font-family: var(--font-logo), var(--font-heading), serif;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+}
+
+.emptyText {
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.emptyAction {
+  margin-top: 0.75rem;
+  padding: 0.95rem 1.6rem;
+  background-color: var(--color-text);
+  color: var(--color-background);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.emptyAction:hover {
+  background-color: var(--color-primary-light);
+}
+
+@media (max-width: 1180px) {
+  .grid[data-variant='catalog'] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1100px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
@@ -31,6 +84,9 @@
   }
   .grid[data-columns='7'] {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .grid[data-variant='catalog'] {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

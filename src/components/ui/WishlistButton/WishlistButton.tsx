@@ -8,7 +8,7 @@ import styles from './WishlistButton.module.css';
 const HEART_PATH =
   'M12 21s-6.7-4.35-9.3-8.2C.9 9.7 1.4 6 4.3 4.4a5 5 0 0 1 7 1.6 5 5 0 0 1 7-1.6c2.9 1.6 3.4 5.3 1.6 8.4C18.7 16.65 12 21 12 21z';
 
-export default function WishlistButton({ product }: { product: Product }) {
+export default function WishlistButton({ product, className }: { product: Product; className?: string }) {
   const { isInWishlist, toggleItem } = useWishlist();
   const active = isInWishlist(product.id);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -28,7 +28,7 @@ export default function WishlistButton({ product }: { product: Product }) {
   return (
     <button
       type="button"
-      className={`${styles.button} ${active ? styles.active : ''} ${isAnimating ? styles.pop : ''}`}
+      className={`${styles.button} ${active ? styles.active : ''} ${isAnimating ? styles.pop : ''} ${className ?? ''}`}
       onClick={handleClick}
       onAnimationEnd={(event) => {
         // Ignora el animationend que burbujea desde el halo (el corazón

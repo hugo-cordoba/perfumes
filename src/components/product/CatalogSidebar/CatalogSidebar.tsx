@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { GENDER_FILTER_OPTIONS, type GenderFilter } from '@/lib/product-gender';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import styles from './CatalogSidebar.module.css';
 
 export interface SidebarBrand {
@@ -15,7 +16,7 @@ interface CatalogSidebarProps {
 }
 
 /**
- * Barra lateral del listado: filtro por genero (checkboxes) encima de la
+ * Barra lateral del listado: filtro por genero (grupo de botones) encima de la
  * lista de marcas. Todo el estado vive en la URL (`?gender=men,women&brand=slug`),
  * igual que el resto de filtros, asi que la pagina sigue siendo Server Component.
  */
@@ -33,11 +34,7 @@ export default function CatalogSidebar({ brands }: CatalogSidebarProps) {
     router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
   }
 
-  function toggleGender(gender: GenderFilter) {
-    const next = selectedGenders.includes(gender)
-      ? selectedGenders.filter((value) => value !== gender)
-      : [...selectedGenders, gender];
-
+  function setGenders(next: string[]) {
     const params = new URLSearchParams(searchParams.toString());
     if (next.length > 0) params.set('gender', next.join(','));
     else params.delete('gender');
@@ -55,23 +52,34 @@ export default function CatalogSidebar({ brands }: CatalogSidebarProps) {
 
   return (
     <aside className={styles.sidebar} aria-label="Filtros del catálogo">
-      <fieldset className={styles.group}>
-        <legend className={styles.legend}>Género</legend>
-        {GENDER_FILTER_OPTIONS.map((option) => (
-          <label key={option.value} className={styles.checkboxRow}>
-            <input
-              type="checkbox"
-              className={styles.checkbox}
-              checked={selectedGenders.includes(option.value)}
-              onChange={() => toggleGender(option.value)}
-            />
-            <span>{option.label}</span>
-          </label>
-        ))}
-      </fieldset>
+      <div className={styles.group} role="group" aria-labelledby="gender-filter-label">
+        <h2 id="gender-filter-label" className={styles.legend}>
+          Género
+        </h2>
+        <ToggleGroup
+          multiple
+          variant="outline"
+          spacing={0}
+          className="w-full max-w-72 max-[800px]:max-w-none"
+          value={selectedGenders}
+          onValueChange={setGenders}
+        >
+          {GENDER_FILTER_OPTIONS.map((option) => (
+            <ToggleGroupItem
+              key={option.value}
+              value={option.value}
+              className="h-10 flex-1 px-2 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/90"
+            >
+              {option.label}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      </div>
 
-      <nav className={styles.group} aria-label="Marcas">
-        <h2 className={styles.legend}>Marcas</h2>
+      <nav className={styles.group} aria-labelledby="brand-filter-label">
+        <h2 id="brand-filter-label" className={styles.legend}>
+          Marcas
+        </h2>
         <ul className={styles.list}>
           <li>
             <Link

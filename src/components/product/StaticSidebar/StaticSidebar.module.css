@@ -1,13 +1,25 @@
+/*
+ * Barra completamente fija respecto a la ventana: `fixed` en vez de `sticky`.
+ * Con sticky, al final de la pagina la barra se empuja hacia arriba cuando se
+ * acaba su contenedor; con fixed se queda siempre a la misma altura. El pie de
+ * pagina (z-index: 1) la tapa si en una ventana muy baja llegaran a coincidir.
+ *
+ * `left` y `width` replican la columna de la rejilla (variables de
+ * ProductCatalog); el tope vertical lo pone el componente tras medirlo.
+ */
 .inner {
-  position: sticky;
+  position: fixed;
+  left: calc(var(--catalog-gutter, 0.75rem) - 4px);
+  width: calc(var(--catalog-rail, 14rem) - var(--catalog-gutter, 0.75rem) - var(--catalog-rail-gap, 1.5rem) + 8px);
   overflow-y: auto;
   padding: 4px; /* hueco para el outline de foco, que overflow recortaria */
-  margin: -4px;
 }
 
 @media (max-width: 800px) {
   .inner {
     position: static;
+    width: auto;
+    margin: -4px; /* compensa el padding de arriba */
     max-height: none !important;
     overflow: visible;
   }

@@ -134,3 +134,159 @@
     transform: translateY(0);
   }
 }
+
+/* =====================================================================
+   Variante "catalog" (listado con barra lateral)
+   Todo cuelga de [data-variant='catalog'], asi que la tarjeta de los
+   carruseles, banners y lista de deseos no cambia.
+   ===================================================================== */
+
+.cardWrapper[data-variant='catalog'] {
+  --card-surface: #f4f4f5;
+  --card-text: var(--catalog-text, clamp(0.78rem, 0.675rem + 0.17vw, 0.875rem));
+
+  width: 100%;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Imagen: producto entero y centrado sobre gris. `multiply` hace que el
+   blanco de las fotos de estudio se funda con el fondo en vez de verse
+   como un recuadro blanco. */
+.cardWrapper[data-variant='catalog'] .imageWrapper {
+  background-color: var(--card-surface);
+  isolation: isolate;
+}
+
+.cardWrapper[data-variant='catalog'] .image {
+  object-fit: contain;
+  padding: 10% 9%;
+  mix-blend-mode: multiply;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.cardWrapper[data-variant='catalog']:hover .image {
+  transform: scale(1.035);
+}
+
+.cardWrapper[data-variant='catalog'] .noImage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.cardWrapper[data-variant='catalog'] .badge {
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+  padding: 0.3rem 0.55rem;
+  background-color: var(--color-text);
+  color: var(--color-background);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Texto: nombre / marca / precio apilados y alineados a la izquierda */
+.cardWrapper[data-variant='catalog'] .info {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.2rem;
+  margin-top: 0.9rem;
+}
+
+.cardWrapper[data-variant='catalog'] .name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--card-text);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.cardWrapper[data-variant='catalog'] .brand {
+  font-size: calc(var(--card-text) - 0.0625rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.cardWrapper[data-variant='catalog'] .price {
+  margin-top: 0.3rem;
+  font-size: var(--card-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.cardWrapper[data-variant='catalog'] .comparePrice {
+  margin-left: 0.55rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* Favoritos: aparece al pasar el raton (siempre visible si ya es favorito
+   o si el dispositivo no tiene hover) para no llenar la rejilla de corazones. */
+.cardWrapper[data-variant='catalog'] .wishlist {
+  top: 0.75rem;
+  right: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.92);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.15s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.cardWrapper[data-variant='catalog']:hover .wishlist,
+.cardWrapper[data-variant='catalog']:focus-within .wishlist,
+.cardWrapper[data-variant='catalog'] .wishlist[aria-pressed='true'] {
+  opacity: 1;
+}
+
+/* Boton de añadir: barra negra a todo el ancho de la imagen */
+.cardWrapper[data-variant='catalog'] .addToCartButton {
+  padding: 1.05rem 1rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+/* Tactil / pantallas estrechas: no hay hover, asi que favorito y boton de
+   añadir se ven siempre. El boton pasa a una barra clara y compacta para que
+   ocho barras negras no dominen la rejilla. */
+@media (hover: none), (max-width: 640px) {
+  .cardWrapper[data-variant='catalog'] .wishlist {
+    opacity: 1;
+  }
+
+  .cardWrapper[data-variant='catalog'] .addToCartButton {
+    padding: 0.7rem 0.5rem;
+    background-color: rgba(24, 24, 27, 0.88);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardWrapper[data-variant='catalog'] .image,
+  .cardWrapper[data-variant='catalog'] .wishlist {
+    transition: none;
+  }
+
+  .cardWrapper[data-variant='catalog']:hover .image {
+    transform: none;
+  }
+}

@@ -1,4 +1,8 @@
 .footer {
+  /* Por encima de la barra de filtros fija del listado (position: fixed): si en
+     una ventana muy baja coinciden, el pie la tapa en vez de pisarlo. */
+  position: relative;
+  z-index: 1;
   background-color: var(--color-primary);
   color: var(--color-background);
   padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.5rem, 5vw, 4rem) 0;

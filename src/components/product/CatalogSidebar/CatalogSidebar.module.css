@@ -1,7 +1,8 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 2rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 .group {
@@ -11,83 +12,89 @@
   min-width: 0;
 }
 
+/* Separador fino entre grupos (Genero / Marcas) */
+.group + .group {
+  padding-top: 2rem;
+  border-top: 1px solid #e4e4e7;
+}
+
+/* Titulo de grupo: discreto, para que no compita con los elementos de la lista */
 .legend {
   display: block;
-  margin: 0 0 0.75rem;
+  margin: 0 0 1rem;
   padding: 0;
   font-family: inherit;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-text);
-}
-
-.checkboxRow {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.25rem 0;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text);
-  cursor: pointer;
-}
-
-.checkbox {
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
-  accent-color: var(--color-text);
-  cursor: pointer;
-}
-
-.checkbox:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  color: var(--color-text-muted);
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.7rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .link {
-  font-size: 0.75rem;
+  display: inline-block;
+  font-size: var(--catalog-text, 0.8125rem);
   font-weight: 700;
-  text-transform: uppercase;
+  line-height: 1.25;
   letter-spacing: 0.04em;
-  color: var(--color-text-muted);
+  text-transform: uppercase;
   text-decoration: none;
-  transition: color 0.15s ease;
+  color: var(--color-text-muted);
+  transition: color 0.18s ease;
 }
 
-.link:hover,
-.linkActive {
+.link:hover {
   color: var(--color-text);
+}
+
+/* Activo: negro + subrayado, para que no dependa solo del color */
+.linkActive,
+.linkActive:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
 }
 
 .link:focus-visible {
   outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline-offset: 4px;
 }
 
 @media (max-width: 800px) {
   .sidebar {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1.5rem 2.5rem;
+    gap: 1.25rem;
   }
 
+  .group + .group {
+    padding-top: 1.25rem;
+  }
+
+  /* Marcas en una sola fila con scroll horizontal, sin barra visible */
   .list {
     flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
+    gap: 0 1.75rem;
+    margin: 0 calc(-1 * var(--catalog-gutter, 0.75rem));
+    padding: 0 var(--catalog-gutter, 0.75rem);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .link {
+    padding: 0.55rem 0;
+    white-space: nowrap;
   }
 }

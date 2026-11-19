@@ -18,10 +18,21 @@ interface ProductCatalogProps {
   totalPages: number;
   pathname: string;
   searchParams: SearchParams;
-  /** Barra lateral opcional (genero + marcas). Sin ella el catalogo ocupa todo el ancho. */
+  /**
+   * Barra lateral opcional (genero + marcas). Con ella el catalogo usa el
+   * diseño "catalog": rejilla a ras del borde derecho, tarjetas "catalog" y
+   * paginacion cuadrada. Sin ella se mantiene el diseño de siempre.
+   */
   sidebar?: ReactNode;
   /** Cabecera (titulo + ordenar) que se alinea con la rejilla. Solo se usa junto con `sidebar`. */
   header?: ReactNode;
+}
+
+/** Hay algun filtro aplicado (el orden y la pagina no cuentan como filtro). */
+function hasActiveFilters(searchParams: SearchParams): boolean {
+  return Object.entries(searchParams).some(
+    ([key, value]) => key !== 'page' && key !== 'sort' && value !== undefined && value !== ''
+  );
 }
 
 export default function ProductCatalog({
@@ -34,15 +45,27 @@ export default function ProductCatalog({
   sidebar,
   header,
 }: ProductCatalogProps) {
+  const variant = sidebar ? 'catalog' : 'default';
+
   const results = (
     <>
-      <ProductGrid products={products} emptyMessage={emptyMessage} />
+      <ProductGrid
+        products={products}
+        emptyMessage={emptyMessage}
+        variant={variant}
+        emptyAction={
+          variant === 'catalog' && hasActiveFilters(searchParams)
+            ? { href: pathname, label: 'Quitar filtros' }
+            : undefined
+        }
+      />
 
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         pathname={pathname}
         searchParams={searchParams}
+        variant={variant}
       />
     </>
   );

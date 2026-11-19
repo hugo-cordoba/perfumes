@@ -49,6 +49,17 @@ export interface ProductVariantGroup {
 
 export type ProductStatus = 'ACTIVE' | 'ARCHIVED';
 
+/**
+ * Lo que necesita una tarjeta de producto. Es `Product` mas los campos
+ * opcionales de `ProductDetail` que usa la variante "catalog" (marca debajo
+ * del nombre y precio tachado). Cualquier `ProductDetail` encaja aqui.
+ */
+export type ProductCardData = Product & {
+  brandLabel?: string;
+  categoryLabel?: string;
+  compareAtPrice?: string;
+};
+
 /** Público objetivo del perfume. `UNISEX` aparece al filtrar por Hombre y por Mujer. */
 export type ProductGender = 'MEN' | 'WOMEN' | 'UNISEX';
 

@@ -4,11 +4,6 @@
   color: var(--color-text);
 }
 
-.flush {
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .titleRow {
   display: flex;
   align-items: baseline;
@@ -39,4 +34,58 @@
   margin-top: 0.5rem;
   font-size: 0.85rem;
   color: var(--color-text-muted);
+}
+
+/* =====================================================================
+   Variante "catalog"
+   ===================================================================== */
+
+/* --catalog-header-pt y --catalog-title-size los define ProductCatalog: la barra
+   lateral los reutiliza para alinear su primer elemento con el titulo. */
+.header[data-variant='catalog'] {
+  padding: var(--catalog-header-pt, clamp(2.25rem, 4.5vw, 4rem)) 0 clamp(0.75rem, 1.2vw, 1.1rem);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.header[data-variant='catalog'] .titleRow {
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  margin-bottom: 0;
+}
+
+/* Misma tipografia que el logotipo de la cabecera (Cinzel Decorative 700).
+   Sin text-transform: con el texto en minusculas/mayusculas tal cual, la fuente
+   saca las iniciales grandes y decoradas, igual que en "Pura Esencia". */
+.header[data-variant='catalog'] .title {
+  font-family: var(--font-logo), var(--font-heading), serif;
+  font-size: var(--catalog-title-size, clamp(1.9rem, 3.4vw, 3.25rem));
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  text-wrap: balance;
+}
+
+.toolbar {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1.25rem, 2vw, 2rem);
+  flex-shrink: 0;
+}
+
+.toolbarCount {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 800px) {
+  /* En movil el titular ocupa su fila y la barra de herramientas va debajo */
+  .toolbar {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
