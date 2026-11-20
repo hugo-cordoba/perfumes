@@ -24,6 +24,26 @@
   --catalog-title-size: clamp(1.9rem, 3.4vw, 3.25rem);
   --catalog-header-pt: clamp(1.25rem, 2.2vw, 2rem);
 
+  /*
+   * Hueco entre la parte alta de la rejilla y el primer elemento de la barra:
+   * padding de la cabecera + hueco entre el borde de la linea del titulo y la
+   * parte alta de sus mayusculas (0.14em), menos el hueco equivalente de la
+   * etiqueta "Genero" (0.17rem). Asi las dos mayusculas quedan a la misma
+   * altura (coeficiente ajustado midiendo capturas con Arial a 1.1 de interlineado).
+   */
+  --catalog-rail-offset: calc(var(--catalog-header-pt) + var(--catalog-title-size) * 0.14 - 0.17rem);
+
+  /*
+   * Tope de la barra fija (StaticSidebar) = donde nace al cargar la pagina:
+   * cabecera fija del sitio + el hueco de arriba. Con eso la barra no se mueve
+   * al empezar a hacer scroll. La cabecera mide 3.85rem (Header.module.css:
+   * 2 x 1.1rem de padding + logo de 1.65rem de alto); si cambia, cambia aqui.
+   */
+  --catalog-rail-top: calc(3.85rem + var(--catalog-rail-offset));
+
+  /* Alto minimo de la barra fija: filtros + unas pocas marcas (lo usan .sidebar y StaticSidebar) */
+  --catalog-rail-min: 20rem;
+
   display: grid;
   grid-template-columns: var(--catalog-rail) minmax(0, 1fr);
   grid-template-areas:
@@ -45,17 +65,18 @@
  * Reserva la columna izquierda de la rejilla (las dos filas: titulo y
  * resultados). El contenido en si (StaticSidebar) va con position: fixed.
  *
- * El padding-top lo coloca a la altura del titulo: padding de la cabecera +
- * hueco entre el borde de la linea del titulo y la parte alta de sus
- * mayusculas (0.22em), menos el hueco equivalente de la etiqueta "Genero"
- * (11px). Asi las dos mayusculas quedan a la misma altura. StaticSidebar
- * mide este punto para fijar la barra exactamente ahi.
+ * El padding-top (--catalog-rail-offset) lo coloca a la altura del titulo.
+ * Esta columna llega hasta el final de la rejilla: StaticSidebar acorta la
+ * barra para que acabe en su borde inferior, antes del pie de pagina.
+ *
+ * El min-height garantiza sitio para una barra usable (--catalog-rail-min)
+ * cuando hay pocos productos y la rejilla es muy baja.
  */
 .sidebar {
   grid-area: sidebar;
   align-self: stretch;
-  padding: calc(var(--catalog-header-pt) + var(--catalog-title-size) * 0.22 - 0.17rem)
-    var(--catalog-rail-gap) 0 var(--catalog-gutter);
+  min-height: calc(var(--catalog-rail-offset) + var(--catalog-rail-min));
+  padding: var(--catalog-rail-offset) var(--catalog-rail-gap) 0 var(--catalog-gutter);
 }
 
 .content {
@@ -87,6 +108,7 @@
   }
 
   .sidebar {
+    min-height: 0;
     padding: 0 var(--catalog-gutter);
     margin-bottom: 1.75rem;
   }

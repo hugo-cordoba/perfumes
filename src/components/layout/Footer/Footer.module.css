@@ -1,6 +1,7 @@
 .footer {
-  /* Por encima de la barra de filtros fija del listado (position: fixed): si en
-     una ventana muy baja coinciden, el pie la tapa en vez de pisarlo. */
+  /* Por encima de la barra de filtros fija del listado (position: fixed). Esa
+     barra se acorta antes de llegar aqui; si en una ventana muy baja llegaran a
+     coincidir, el pie la tapa en vez de que ella lo pise. */
   position: relative;
   z-index: 1;
   background-color: var(--color-primary);

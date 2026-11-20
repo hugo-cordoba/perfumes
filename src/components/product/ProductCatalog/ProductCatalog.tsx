@@ -77,7 +77,9 @@ export default function ProductCatalog({
   return (
     <div className={`${styles.wrapper} ${styles.withSidebar}`}>
       {header && <div className={styles.header}>{header}</div>}
-      <StaticSidebar className={styles.sidebar}>{sidebar}</StaticSidebar>
+      <StaticSidebar className={styles.sidebar} fillHeight={products.length === 0}>
+        {sidebar}
+      </StaticSidebar>
       <div className={styles.content}>{results}</div>
     </div>
   );

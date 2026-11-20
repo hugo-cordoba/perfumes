@@ -1,7 +1,8 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.25rem;
+  min-height: 0;
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
@@ -12,16 +13,23 @@
   min-width: 0;
 }
 
-/* Separador fino entre grupos (Genero / Marcas) */
-.group + .group {
-  padding-top: 2rem;
-  border-top: 1px solid #e4e4e7;
+/* El filtro de genero conserva su altura; solo la lista de marcas cede espacio */
+.sidebar > .group {
+  flex: 0 0 auto;
+}
+
+.sidebar > .brands {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
 }
 
 /* Titulo de grupo: discreto, para que no compita con los elementos de la lista */
 .legend {
   display: block;
-  margin: 0 0 1rem;
+  flex: none;
+  margin: 0 0 0.9rem;
   padding: 0;
   font-family: inherit;
   font-size: 0.6875rem;
@@ -31,23 +39,160 @@
   color: var(--color-text-muted);
 }
 
+/* =====================================================================
+   Buscador de marcas: solo una linea, a juego con el buscador del sitio
+   ===================================================================== */
+
+.search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.6rem;
+  height: 2.5rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--color-secondary, #a1a1aa);
+  color: var(--color-text-muted);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+/* Foco: la linea se oscurece y engorda (1px + 1px de sombra, sin mover nada) */
+.search:focus-within {
+  border-bottom-color: var(--color-text);
+  box-shadow: 0 1px 0 0 var(--color-text);
+  color: var(--color-text);
+}
+
+.searchIcon {
+  flex: none;
+}
+
+.searchInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+/* El boton de borrar es el nuestro, no el nativo del navegador */
+.searchInput::-webkit-search-decoration,
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.searchClear {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-right: -0.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.searchClear:hover {
+  color: var(--color-text);
+}
+
+/* Anuncia el numero de resultados a lectores de pantalla, sin ocupar sitio */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =====================================================================
+   Lista de marcas: scroll sin barra visible
+   El degradado de los bordes avisa de que hay mas marcas arriba o abajo.
+   ===================================================================== */
+
+.scroller {
+  --fade: 1.75rem;
+
+  flex: 1 1 auto;
+  min-height: 0;
+  /* El padding da sitio al anillo de foco (el overflow lo recortaria) y el
+     margen negativo lo compensa para que el texto siga alineado con el resto */
+  margin: 0 -0.5rem;
+  padding: 0.25rem 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge antiguo */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fade-top, 0px),
+    #000 calc(100% - var(--fade-bottom, 0px)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fade-top, 0px),
+    #000 calc(100% - var(--fade-bottom, 0px)),
+    transparent 100%
+  );
+}
+
+.scroller::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* Solo se difuminan los bordes por donde todavia hay contenido */
+.scroller[data-fade-top='true'] {
+  --fade-top: var(--fade);
+}
+
+.scroller[data-fade-bottom='true'] {
+  --fade-bottom: var(--fade);
+}
+
 .list {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .link {
-  display: inline-block;
+  display: block;
+  padding: 0.35rem 0;
   font-size: var(--catalog-text, 0.8125rem);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0.04em;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
+  overflow-wrap: anywhere;
   color: var(--color-text-muted);
   transition: color 0.18s ease;
 }
@@ -56,41 +201,61 @@
   color: var(--color-text);
 }
 
-/* Activo: negro + subrayado, para que no dependa solo del color */
+/* Activo: negro + subrayado fino, para que no dependa solo del color */
 .linkActive,
 .linkActive:hover {
   color: var(--color-text);
   text-decoration: underline;
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: 1px;
   text-underline-offset: 6px;
 }
 
 .link:focus-visible {
   outline: 2px solid var(--color-primary);
-  outline-offset: 4px;
+  outline-offset: 2px;
+}
+
+.empty {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  color: var(--color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search,
+  .searchClear,
+  .link {
+    transition: none;
+  }
 }
 
 @media (max-width: 800px) {
   .sidebar {
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
 
-  .group + .group {
-    padding-top: 1.25rem;
+  /* 16px: por debajo, iOS hace zoom al enfocar el campo */
+  .searchInput {
+    font-size: 1rem;
   }
 
   /* Marcas en una sola fila con scroll horizontal, sin barra visible */
-  .list {
-    flex-direction: row;
-    gap: 0 1.75rem;
+  .scroller {
+    flex: none;
     margin: 0 calc(-1 * var(--catalog-gutter, 0.75rem));
     padding: 0 var(--catalog-gutter, 0.75rem);
     overflow-x: auto;
-    scrollbar-width: none;
+    overflow-y: hidden;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
-  .list::-webkit-scrollbar {
-    display: none;
+  .list {
+    flex-direction: row;
+    gap: 0 1.75rem;
+    width: max-content;
   }
 
   .link {
