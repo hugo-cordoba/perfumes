@@ -7,6 +7,23 @@ export interface NavLink {
 }
 
 /**
+ * Capa de un frasco: imagen PNG/WebP con fondo transparente y MISMAS
+ * dimensiones que `media.src`, para que encajen sin calcular nada.
+ * Es lo unico que se anima; el fondo se queda estatico.
+ */
+export interface HeroBottle {
+  src: string;
+  /**
+   * Punto de apoyo del frasco (% de la imagen): baseX es su centro
+   * horizontal y, junto a baseY, el origen del zoom y de la sombra.
+   */
+  baseX: number;
+  baseY: number;
+  /** Ancho del frasco (% de la imagen), para dimensionar la sombra. */
+  width: number;
+}
+
+/**
  * Panel de un hero dividido (p. ej. "Para el" / "Para ella"). Cada panel
  * recorta una mitad de `media.src` y es un enlace a su seccion.
  */
@@ -17,33 +34,24 @@ export interface HeroPanel {
   ctaLabel: string;
   href: string;
   /**
-   * Donde queda el centro del frasco dentro del panel (% del ancho; 50 =
-   * centrado). El encuadre se calcula solo, asi que el frasco queda
-   * exactamente ahi con cualquier tamano de pantalla.
+   * Centro horizontal (% de la imagen) de lo que se quiere encuadrar en el
+   * panel, p. ej. el centro del grupo de frascos. Por defecto, la media de
+   * los `baseX` de `bottles`.
+   */
+  focusX?: number;
+  /**
+   * Donde queda `focusX` dentro del panel (% del ancho; 50 = centrado). El
+   * encuadre se calcula solo, asi que queda exactamente ahi con cualquier
+   * tamano de pantalla.
    */
   center?: number;
   /**
-   * Igual que `center`, en movil (paneles apilados). Por defecto 66: frasco a
-   * la derecha y texto libre a la izquierda.
+   * Igual que `center`, en movil (paneles apilados). Por defecto 66: frascos
+   * a la derecha y texto libre a la izquierda.
    */
   centerMobile?: number;
-  /**
-   * Capa del frasco: imagen PNG/WebP con fondo transparente y MISMAS
-   * dimensiones que `media.src`, para que encajen sin calcular nada.
-   * Es lo unico que se anima; el fondo se queda estatico.
-   */
-  bottle?: {
-    src: string;
-    /**
-     * Punto de apoyo del frasco (% de la imagen): baseX es su centro
-     * horizontal (se usa para centrarlo) y, junto a baseY, el origen del
-     * zoom y de la sombra.
-     */
-    baseX: number;
-    baseY: number;
-    /** Ancho del frasco (% de la imagen), para dimensionar la sombra. */
-    width: number;
-  };
+  /** Frascos animados del panel (cada uno flota con su propio desfase). */
+  bottles?: HeroBottle[];
 }
 
 export interface HeroProps {

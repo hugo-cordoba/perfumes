@@ -52,7 +52,16 @@
   object-fit: fill;
 }
 
-/* ---------- Frasco: lo unico que se mueve ---------- */
+/* ---------- Frascos: lo unico que se mueve ---------- */
+
+/* Contenedor de cada frasco (sin z-index: sombras y frascos comparten el
+   contexto del frame, asi todas las sombras quedan debajo de todos los frascos). */
+.bottleItem {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
 
 .bottle {
   position: absolute;
@@ -70,7 +79,7 @@
   inset: 0;
   display: block;
   animation:
-    bottleIn 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) calc(var(--delay, 0s) + 0.2s) both,
+    bottleIn 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) calc(var(--delay, 0s) + 0.2s + var(--stagger, 0s)) both,
     float 5.4s ease-in-out var(--phase, 0s) infinite alternate;
   will-change: transform;
 }

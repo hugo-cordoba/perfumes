@@ -8,7 +8,7 @@ import type { HeroPanel as HeroPanelData } from '@/types/section.types';
 import styles from './HeroPanel.module.css';
 
 interface HeroPanelProps extends HeroPanelData {
-  /** Fondo estatico (sin frascos). */
+  /** Fondo estatico (sin frascos). Todas las capas cubren la imagen completa. */
   image: string;
   aspectRatio: number;
   /** Posicion del panel dentro del hero; escalona las animaciones. */
@@ -28,9 +28,14 @@ export default function HeroPanel({
   href,
   center = 50,
   centerMobile = 66,
-  bottle,
+  bottles = [],
+  focusX,
 }: HeroPanelProps) {
   const ref = useRef<HTMLAnchorElement>(null);
+
+  // Punto de la imagen que se centra en el panel: por defecto, el centro del grupo.
+  const focus =
+    focusX ?? (bottles.length > 0 ? bottles.reduce((sum, b) => sum + b.baseX, 0) / bottles.length : 50);
 
   // Escribimos variables CSS directamente en el nodo: asi el movimiento
   // no provoca re-renders de React en cada evento del puntero.
@@ -62,23 +67,16 @@ export default function HeroPanel({
       style={
         {
           '--delay': `${index * 0.18}s`,
-          // Desfasa la flotacion entre frascos para que no vayan al unisono.
-          '--phase': `${index * -2.7}s`,
-          // Posicion (0-1) donde queremos el centro del frasco dentro del panel...
+          // Posicion (0-1) donde queremos el foco dentro del panel...
           '--m-desktop': center / 100,
           '--m-mobile': centerMobile / 100,
-          // ...y donde esta ese centro dentro de la imagen (0-1).
-          '--c': (bottle?.baseX ?? 50) / 100,
+          // ...y donde esta ese foco dentro de la imagen (0-1).
+          '--c': focus / 100,
           '--aspect': aspectRatio,
-          ...(bottle && {
-            '--bx': bottle.baseX,
-            '--by': bottle.baseY,
-            '--bw': bottle.width,
-          }),
         } as React.CSSProperties
       }
     >
-      {/* Frame con las proporciones de la imagen: el fondo y el frasco comparten
+      {/* Frame con las proporciones de la imagen: el fondo y los frascos comparten
           el mismo encuadre, asi que siempre coinciden al recortar el panel. */}
       <span className={styles.frame} aria-hidden="true">
         <Image
@@ -86,12 +84,25 @@ export default function HeroPanel({
           alt=""
           fill
           priority
-          sizes="(max-width: 720px) 100vw, 50vw"
+          sizes="(max-width: 720px) 200vw, 100vw"
           className={styles.layer}
         />
 
-        {bottle && (
-          <>
+        {bottles.map((bottle, i) => (
+          <span
+            key={bottle.src}
+            className={styles.bottleItem}
+            style={
+              {
+                '--bx': bottle.baseX,
+                '--by': bottle.baseY,
+                '--bw': bottle.width,
+                // Entrada escalonada y flotacion desfasada: cada frasco a su ritmo.
+                '--stagger': `${i * 0.12}s`,
+                '--phase': `${(index * bottles.length + i) * -1.9}s`,
+              } as React.CSSProperties
+            }
+          >
             <span className={styles.shadow} />
             <span className={styles.bottle}>
               <span className={styles.bottleFloat}>
@@ -105,8 +116,8 @@ export default function HeroPanel({
                 />
               </span>
             </span>
-          </>
-        )}
+          </span>
+        ))}
       </span>
 
       <span className={styles.scrim} aria-hidden="true" />

@@ -32,16 +32,17 @@ export const landingSections: SectionConfig[] = [
       title: 'Descubre tu fragancia',
       media: {
         type: 'image',
-        // Fondo ESTATICO sin frascos (/public/banner-bg.webp). Los frascos
-        // son capas transparentes del mismo tamaño (banner-left/right.webp).
-        // Original completo en /design/banner-original.png.
+        // Fondo ESTATICO sin frascos (/public/banner-bg.webp). Cada frasco es
+        // una capa transparente del mismo tamaño (banner-<frasco>.webp).
+        // Fuentes en /design: banner-original.png (con frascos) y
+        // banner-sin-perfumes.png (fondo limpio).
         src: '/banner-bg.webp',
         aspectRatio: 2048 / 768,
       },
-      // Cada panel recorta una parte del banner y centra su frasco (por defecto
-      // en el centro del panel; ver `center` / `centerMobile`). `bottle` es la
-      // capa animada (baseX/baseY/width en % de la imagen: punto de apoyo y
-      // ancho del frasco).
+      // Cada panel recorta una parte del banner y centra su grupo de frascos
+      // (`focusX`, % de la imagen) en el panel (ver `center` / `centerMobile`).
+      // `bottles` son las capas animadas (baseX/baseY/width en % de la imagen:
+      // punto de apoyo y ancho de cada frasco).
       panels: [
         {
           id: 'para-el',
@@ -49,7 +50,13 @@ export const landingSections: SectionConfig[] = [
           title: 'Para él',
           ctaLabel: 'Descubrir',
           href: '/products?gender=men',
-          bottle: { src: '/banner-left.webp', baseX: 28.1, baseY: 89.1, width: 15.7 },
+          focusX: 25.5,
+          centerMobile: 56,
+          bottles: [
+            { src: '/banner-cdn.webp', baseX: 16.7, baseY: 74, width: 9.1 },
+            { src: '/banner-asad.webp', baseX: 25.4, baseY: 62.5, width: 7.6 },
+            { src: '/banner-hawas.webp', baseX: 34.5, baseY: 73.8, width: 9 },
+          ],
         },
         {
           id: 'para-ella',
@@ -57,7 +64,13 @@ export const landingSections: SectionConfig[] = [
           title: 'Para ella',
           ctaLabel: 'Descubrir',
           href: '/products?gender=women',
-          bottle: { src: '/banner-right.webp', baseX: 77, baseY: 91.8, width: 11.6 },
+          focusX: 80,
+          centerMobile: 56,
+          bottles: [
+            { src: '/banner-yara.webp', baseX: 70.4, baseY: 74.9, width: 8 },
+            { src: '/banner-khamrah.webp', baseX: 79.6, baseY: 72, width: 8 },
+            { src: '/banner-fakhar.webp', baseX: 90, baseY: 76.7, width: 10.8 },
+          ],
         },
       ],
     },
