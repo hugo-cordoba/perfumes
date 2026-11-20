@@ -21,9 +21,11 @@ const nextConfig = {
     ],
   },
   experimental: {
+    // exceljs se carga tal cual en el servidor (no se empaqueta con webpack).
+    serverComponentsExternalPackages: ['exceljs'],
     serverActions: {
-      // Las imágenes de producto viajan como FormData en un Server Action;
-      // el límite por defecto (1 MB) se queda corto.
+      // Las imágenes de producto y los Excel de importación viajan como
+      // FormData en un Server Action; el límite por defecto (1 MB) se queda corto.
       bodySizeLimit: '10mb',
     },
   },
