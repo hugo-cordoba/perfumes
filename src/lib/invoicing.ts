@@ -109,7 +109,7 @@ export async function generateInvoiceForOrder(input: GenerateInvoiceInput) {
           ? input.buyerAddress ?? `${order.shippingLine1}, ${order.shippingPostal} ${order.shippingCity}`
           : null,
         subtotal: totals.subtotal,
-        taxBreakdown: totals.breakdown,
+        taxBreakdown: totals.breakdown as unknown as Prisma.InputJsonValue,
         totalTax: totals.totalTax,
         total: totals.total,
         items: {
