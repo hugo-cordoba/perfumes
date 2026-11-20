@@ -236,9 +236,25 @@
     gap: 1.5rem;
   }
 
-  /* 16px: por debajo, iOS hace zoom al enfocar el campo */
-  .searchInput {
-    font-size: 1rem;
+  /* En movil no se muestra el buscador de marcas */
+  .search {
+    display: none;
+  }
+
+  /* Ni los titulos "Genero" y "Marcas": se quedan solo para lectores de pantalla */
+  .legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  /* El hueco que dejaba el buscador ya no hace falta */
+  .sidebar {
+    gap: 1rem;
   }
 
   /* Marcas en una sola fila con scroll horizontal, sin barra visible */
@@ -248,8 +264,34 @@
     padding: 0 var(--catalog-gutter, 0.75rem);
     overflow-x: auto;
     overflow-y: hidden;
-    -webkit-mask-image: none;
-    mask-image: none;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: var(--catalog-gutter, 0.75rem);
+    /* Difuminado por los lados: avisa de que hay mas marcas y evita el corte seco */
+    --fade: 2.5rem;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 var(--fade-left, 0px),
+      #000 calc(100% - var(--fade-right, 0px)),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 var(--fade-left, 0px),
+      #000 calc(100% - var(--fade-right, 0px)),
+      transparent 100%
+    );
+  }
+
+  /* En horizontal solo se difuminan los lados por donde todavia hay marcas */
+  .scroller[data-fade-left='true'] {
+    --fade-left: var(--fade);
+  }
+
+  .scroller[data-fade-right='true'] {
+    --fade-right: var(--fade);
   }
 
   .list {

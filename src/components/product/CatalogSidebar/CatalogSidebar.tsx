@@ -42,7 +42,7 @@ export default function CatalogSidebar({ brands }: CatalogSidebarProps) {
   const searchParams = useSearchParams();
 
   const [query, setQuery] = useState('');
-  const [edges, setEdges] = useState({ top: false, bottom: false });
+  const [edges, setEdges] = useState({ top: false, bottom: false, left: false, right: false });
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -72,7 +72,14 @@ export default function CatalogSidebar({ brands }: CatalogSidebarProps) {
     if (!scroller) return;
     const top = scroller.scrollTop > 1;
     const bottom = scroller.scrollTop + scroller.clientHeight < scroller.scrollHeight - 1;
-    setEdges((prev) => (prev.top === top && prev.bottom === bottom ? prev : { top, bottom }));
+    // En movil la lista corre en horizontal: mismo aviso, pero por los lados
+    const left = scroller.scrollLeft > 1;
+    const right = scroller.scrollLeft + scroller.clientWidth < scroller.scrollWidth - 1;
+    setEdges((prev) =>
+      prev.top === top && prev.bottom === bottom && prev.left === left && prev.right === right
+        ? prev
+        : { top, bottom, left, right },
+    );
   }, []);
 
   // El alto de la lista cambia al filtrar, al acortarse la barra cerca del pie o al cambiar la ventana
@@ -202,6 +209,8 @@ export default function CatalogSidebar({ brands }: CatalogSidebarProps) {
           onScroll={syncEdges}
           data-fade-top={edges.top}
           data-fade-bottom={edges.bottom}
+          data-fade-left={edges.left}
+          data-fade-right={edges.right}
         >
           <ul className={styles.list}>
             {/* "Todas" no es una marca: al buscar solo salen las marcas que coinciden */}
