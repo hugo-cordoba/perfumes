@@ -216,33 +216,50 @@
 /* ---------- Movil (paneles apilados) ---------- */
 
 @media (max-width: 720px) {
-  /* Frasco a la derecha y texto libre a la izquierda, igual en ambos paneles. */
   .panel {
     --m: var(--m-mobile);
   }
 
+  .frame {
+    top: auto;
+    bottom: 0;
+  }
+
   .scrim {
-    background:
-      linear-gradient(to top, rgba(24, 18, 14, 0.6) 0%, rgba(24, 18, 14, 0.2) 30%, rgba(24, 18, 14, 0) 55%),
-      linear-gradient(to right, rgba(24, 18, 14, 0.38) 0%, rgba(24, 18, 14, 0) 55%);
+    background: linear-gradient(
+      to top,
+      rgba(24, 18, 14, 0.62) 0%,
+      rgba(24, 18, 14, 0.25) 32%,
+      rgba(24, 18, 14, 0) 58%
+    );
   }
 
   .caption {
-    padding: 1.25rem 1.25rem 1.5rem;
-    gap: 0.3rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'eyebrow cta'
+      'title cta';
+    align-items: end;
+    gap: 0.1rem 1rem;
+    padding: 0.9rem 1.1rem 1rem;
   }
 
   .eyebrow {
-    font-size: 0.64rem;
+    grid-area: eyebrow;
+    font-size: 0.6rem;
   }
 
   .title {
-    font-size: 2rem;
+    grid-area: title;
+    font-size: 1.75rem;
   }
 
   .cta {
-    margin-top: 0.4rem;
-    font-size: 0.7rem;
+    grid-area: cta;
+    align-self: end;
+    margin-top: 0;
+    font-size: 0.68rem;
   }
 }
 

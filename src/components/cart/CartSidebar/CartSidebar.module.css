@@ -25,10 +25,16 @@
   z-index: 70;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
   transform: translateX(100%);
   transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   will-change: transform;
+  padding: calc(2rem + env(safe-area-inset-top, 0px)) 2rem 2rem;
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    padding: calc(1.75rem + env(safe-area-inset-top, 0px)) 1.5rem 1.75rem;
+  }
 }
 
 .sidebar[data-open='true'] {

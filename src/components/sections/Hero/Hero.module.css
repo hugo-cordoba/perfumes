@@ -138,8 +138,8 @@
 
   .split > a {
     flex: none;
-    /* Casi cuadrado: el frasco se ve grande y cabe el texto al lado. */
-    height: clamp(380px, 100vw, 520px);
+    height: 260px; /* fallback si el navegador no soporta svh */
+    height: clamp(240px, calc((100svh - 3.6rem - env(safe-area-inset-top, 0px) - 2.5rem) / 2), 340px);
   }
 
   .split > a + a {
