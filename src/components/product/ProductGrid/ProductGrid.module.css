@@ -97,3 +97,43 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ---------- Densidad elegida con el selector "Por fila" (?cols=) ---------- */
+
+.grid[data-variant='catalog'][data-per-row='2'] {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid[data-variant='catalog'][data-per-row='8'] {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+@media (min-width: 801px) {
+  .grid[data-variant='catalog'][data-per-row='8'] {
+    gap: clamp(1.5rem, 2.2vw, 2.25rem) 4px;
+    /* ProductCard lee estas variables (ver ProductCard.module.css) */
+    --catalog-text: 0.6875rem;
+    --card-button-text: 0.5625rem;
+    --card-button-tracking: 0.05em;
+    --card-button-pad: 0.65rem 0.25rem;
+  }
+}
+
+@media (max-width: 1280px) {
+  .grid[data-variant='catalog'][data-per-row='8'] {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .grid[data-variant='catalog'][data-per-row='8'] {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .grid[data-variant='catalog'][data-per-row='2'],
+  .grid[data-variant='catalog'][data-per-row='8'] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ProductDetail } from '@/types/product.types';
 import type { FilterGroup } from '@/lib/product-filters';
+import type { GridColumns } from '@/lib/pagination';
 import ProductGrid from '@/components/product/ProductGrid/ProductGrid';
 import StaticSidebar from '@/components/product/StaticSidebar/StaticSidebar';
 import Pagination from '@/components/product/Pagination/Pagination';
@@ -26,12 +27,13 @@ interface ProductCatalogProps {
   sidebar?: ReactNode;
   /** Cabecera (titulo + ordenar) que se alinea con la rejilla. Solo se usa junto con `sidebar`. */
   header?: ReactNode;
+  perRow?: GridColumns;
 }
 
-/** Hay algun filtro aplicado (el orden y la pagina no cuentan como filtro). */
 function hasActiveFilters(searchParams: SearchParams): boolean {
   return Object.entries(searchParams).some(
-    ([key, value]) => key !== 'page' && key !== 'sort' && value !== undefined && value !== ''
+    ([key, value]) =>
+      key !== 'page' && key !== 'sort' && key !== 'cols' && value !== undefined && value !== ''
   );
 }
 
@@ -44,6 +46,7 @@ export default function ProductCatalog({
   searchParams,
   sidebar,
   header,
+  perRow,
 }: ProductCatalogProps) {
   const variant = sidebar ? 'catalog' : 'default';
 
@@ -53,6 +56,7 @@ export default function ProductCatalog({
         products={products}
         emptyMessage={emptyMessage}
         variant={variant}
+        perRow={perRow}
         emptyAction={
           variant === 'catalog' && hasActiveFilters(searchParams)
             ? { href: pathname, label: 'Quitar filtros' }

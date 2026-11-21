@@ -38,7 +38,7 @@ export interface FilterGroup {
 type SearchParams = { [key: string]: string | string[] | undefined };
 
 /** Claves que no representan un grupo de variante y no deben tratarse como tal. */
-const RESERVED_KEYS = new Set(['sort', 'minPrice', 'maxPrice', 'inStock', 'q', 'gender', 'brand', 'page']);
+const RESERVED_KEYS = new Set(['sort', 'minPrice', 'maxPrice', 'inStock', 'q', 'gender', 'brand', 'page', 'cols']);
 
 function firstValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;

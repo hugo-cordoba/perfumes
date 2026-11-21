@@ -256,10 +256,10 @@
 
 /* Boton de añadir: barra negra a todo el ancho de la imagen */
 .cardWrapper[data-variant='catalog'] .addToCartButton {
-  padding: 1.05rem 1rem;
+  padding: var(--card-button-pad, 1.05rem 1rem);
   font-family: inherit;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  font-size: var(--card-button-text, 0.75rem);
+  letter-spacing: var(--card-button-tracking, 0.12em);
 }
 
 /* Tactil / pantallas estrechas: no hay hover, asi que favorito y boton de
@@ -271,10 +271,10 @@
   }
 
   .cardWrapper[data-variant='catalog'] .addToCartButton {
-    padding: 0.7rem 0.5rem;
+    padding: var(--card-button-pad, 0.7rem 0.5rem);
     background-color: rgba(24, 24, 27, 0.88);
-    font-size: 0.625rem;
-    letter-spacing: 0.1em;
+    font-size: var(--card-button-text, 0.625rem);
+    letter-spacing: var(--card-button-tracking, 0.1em);
     opacity: 1;
     transform: translateY(0);
   }

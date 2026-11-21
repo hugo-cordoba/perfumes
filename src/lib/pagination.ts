@@ -16,6 +16,25 @@ export function parsePageParam(searchParams: SearchParams): number {
   return Math.floor(parsed);
 }
 
+export const GRID_COLUMN_OPTIONS = [2, 4, 8] as const;
+export type GridColumns = (typeof GRID_COLUMN_OPTIONS)[number];
+export const DEFAULT_GRID_COLUMNS: GridColumns = 4;
+
+export function parseColumnsParam(searchParams: SearchParams): GridColumns {
+  const raw = Array.isArray(searchParams.cols) ? searchParams.cols[0] : searchParams.cols;
+  const parsed = Number(raw);
+  return (GRID_COLUMN_OPTIONS as readonly number[]).includes(parsed)
+    ? (parsed as GridColumns)
+    : DEFAULT_GRID_COLUMNS;
+}
+
+/** Siempre filas completas: 4 filas de 2, 3 filas de 4, 3 filas de 8. */
+export function pageSizeForColumns(columns: GridColumns): number {
+  if (columns === 2) return 8;
+  if (columns === 8) return 24;
+  return PRODUCTS_PAGE_SIZE;
+}
+
 export interface PaginatedResult<T> {
   items: T[];
   currentPage: number;

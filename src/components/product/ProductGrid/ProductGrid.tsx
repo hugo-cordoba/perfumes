@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ProductCardData } from '@/types/product.types';
+import type { GridColumns } from '@/lib/pagination';
 import ProductCard from '@/components/ui/ProductCard/ProductCard';
 import styles from './ProductGrid.module.css';
 
@@ -11,6 +12,7 @@ interface ProductGridProps {
   variant?: 'default' | 'catalog';
   /** Solo variante catalog: enlace bajo el mensaje vacio (ej. "Quitar filtros"). */
   emptyAction?: { href: string; label: string };
+  perRow?: GridColumns;
 }
 
 export default function ProductGrid({
@@ -19,6 +21,7 @@ export default function ProductGrid({
   columns = 4,
   variant = 'default',
   emptyAction,
+  perRow,
 }: ProductGridProps) {
   if (products.length === 0) {
     if (variant === 'catalog') {
@@ -38,7 +41,12 @@ export default function ProductGrid({
   }
 
   return (
-    <div className={styles.grid} data-columns={columns} data-variant={variant}>
+    <div
+      className={styles.grid}
+      data-columns={columns}
+      data-variant={variant}
+      data-per-row={variant === 'catalog' ? perRow : undefined}
+    >
       {products.map((product) => (
         <ProductCard key={product.id} product={product} variant={variant} />
       ))}

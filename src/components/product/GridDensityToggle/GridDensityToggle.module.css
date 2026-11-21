@@ -1,0 +1,66 @@
+.toggle {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.list {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+  list-style: none;
+}
+
+.link {
+  display: inline-block;
+  min-width: 1.75rem;
+  padding: 0.35rem 0.4rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  transition: color 0.18s ease;
+}
+
+.link:hover {
+  color: var(--color-text);
+}
+
+.linkActive,
+.linkActive:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* En móvil la rejilla es siempre de 2: el selector no aporta nada */
+@media (max-width: 800px) {
+  .toggle {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}
