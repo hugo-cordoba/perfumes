@@ -12,13 +12,18 @@
  *
  * - El margen izquierdo de la barra es el mismo que el de la cabecera del
  *   sitio (menu hamburguesa), para que queden alineados en vertical.
- * - La rejilla llega hasta el borde derecho de la ventana (sin padding).
+ * - La rejilla deja un margen a la derecha (--catalog-edge) que comparte con
+ *   la cabecera, para que "Ordenar por" quede alineado con la ultima columna.
+ *   El hueco entre tarjetas (--catalog-col-gap) vive en ProductGrid.module.css.
  */
 .withSidebar {
   --catalog-gutter: clamp(0.75rem, 2.5vw, 1.5rem);
   --catalog-rail: clamp(12rem, 14vw, 16.5rem);
   --catalog-rail-gap: clamp(1rem, 2vw, 1.75rem); /* aire entre la barra y la rejilla */
   --catalog-text: clamp(0.78rem, 0.675rem + 0.17vw, 0.875rem);
+
+  /* Margen derecho de la cabecera y de la rejilla (en movil se iguala al gutter, ver abajo) */
+  --catalog-edge: clamp(0.875rem, 1.6vw, 1.5rem);
 
   /* Los usan CatalogHeader (titulo) y la barra lateral (para alinearse con el titulo) */
   --catalog-title-size: clamp(1.9rem, 3.4vw, 3.25rem);
@@ -58,7 +63,7 @@
 .header {
   grid-area: header;
   min-width: 0;
-  padding-right: var(--catalog-gutter);
+  padding-right: var(--catalog-edge);
 }
 
 /*
@@ -85,6 +90,7 @@
   flex-direction: column;
   gap: 1.5rem;
   min-width: 0;
+  padding-right: var(--catalog-edge);
 }
 
 @media (max-width: 800px) {
@@ -95,6 +101,9 @@
        el breakpoint. */
     --catalog-title-size: clamp(1.1rem, calc((100vw - 2 * var(--catalog-gutter)) / 13.6), 1.9rem);
     --catalog-header-pt: 1.75rem;
+
+    /* En movil el margen derecho es el mismo gutter de siempre */
+    --catalog-edge: var(--catalog-gutter);
 
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
