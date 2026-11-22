@@ -105,12 +105,13 @@ export interface ProductCarouselProps {
 }
 
 export interface FeatureBannerProps {
-  title: string;
+  title?: string;
   description?: string;
   ctaLabel?: string;
   ctaHref?: string;
   products?: Product[];
   backgroundImage?: string;
+  imageAlt?: string;
 }
 
 export interface Category {

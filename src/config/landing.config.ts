@@ -88,11 +88,8 @@ export const landingSections: SectionConfig[] = [
     id: 'destacado',
     type: 'featureBanner',
     props: {
-      title: 'Una coleccion para cada ocasion',
-      description: 'Bloque de ancho completo con el color principal de marca, ideal para campañas o lanzamientos.',
-      ctaLabel: 'Comprar ahora',
-      ctaHref: '#productos',
-      backgroundImage: '/section1.png',
+      backgroundImage: '/destacado-2.webp',
+      imageAlt: 'Una colección para cada ocasión',
     },
   },
   {

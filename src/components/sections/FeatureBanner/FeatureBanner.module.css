@@ -43,3 +43,14 @@
   gap: 1.5rem;
   flex-wrap: wrap;
 }
+
+.imageOnly {
+  background-color: var(--color-background);
+  line-height: 0;
+}
+
+.imageOnlyImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
