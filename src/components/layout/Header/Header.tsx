@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { CircleUserRound, Search, ShoppingBag } from 'lucide-react';
 import type { NavLink } from '@/types/section.types';
 import { useCart } from '@/context/CartContext';
-import { useWishlist } from '@/context/WishlistContext';
 import { useAuth } from '@/context/AuthContext';
 import AuthSidebar from '@/components/auth/AuthSidebar/AuthSidebar';
 import CartSidebar from '@/components/cart/CartSidebar/CartSidebar';
@@ -47,7 +46,6 @@ export default function Header({
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { itemCount } = useCart();
-  const { itemCount: wishlistItemCount } = useWishlist();
   const { user, hydrated: authHydrated } = useAuth();
   const displayCartCount = cartCount ?? itemCount;
   const prevCartCountRef = useRef(displayCartCount);
@@ -113,13 +111,6 @@ export default function Header({
     setAuthOpen(false);
     setCartOpen(false);
     setSearchOpen((open) => !open);
-  }
-
-  function handleWishlistClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    if (!user && authHydrated) {
-      e.preventDefault();
-      openAuth();
-    }
   }
 
   if (minimal) {
@@ -240,30 +231,6 @@ export default function Header({
             ))}
           </ul>
         </nav>
-
-        <div className={styles.sidebarFooter}>
-          {authHydrated && user ? (
-            <a href="/account" onClick={() => setMenuOpen(false)}>
-              {user.fullName.split(' ')[0]}
-            </a>
-          ) : (
-            <button type="button" className={styles.sidebarLogout} onClick={openAuth}>
-              {loginLabel}
-            </button>
-          )}
-
-          <a
-            href={wishlistHref}
-            onClick={(e) => {
-              handleWishlistClick(e);
-              if (user || !authHydrated) {
-                setMenuOpen(false);
-              }
-            }}
-          >
-            {wishlistLabel} ({wishlistItemCount})
-          </a>
-        </div>
       </aside>
 
       <AuthSidebar isOpen={authOpen} onClose={() => setAuthOpen(false)} />
