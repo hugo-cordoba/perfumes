@@ -395,4 +395,23 @@
   .desktopOnly {
     display: none !important;
   }
+
+  .bar {
+    gap: 0.5rem;
+    padding-left: max(1.125rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.125rem, env(safe-area-inset-right, 0px));
+  }
+
+  /* Iconos de 22px a 20px (buscar, cuenta, cesta) */
+  .iconAction svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* La hamburguesa también baja de 22px a 20px para que todo quede proporcionado */
+  .menuIcon,
+  .menuIcon::before,
+  .menuIcon::after {
+    width: 20px;
+  }
 }
