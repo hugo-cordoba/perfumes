@@ -107,23 +107,27 @@
     --catalog-edge: var(--catalog-gutter);
 
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      'header'
-      'sidebar'
-      'content';
+    /* Sin areas con nombre: el orden lo marca `order` (titulo 1, marcas 2, filtros 3, productos 4) */
+    grid-template-areas: none;
   }
 
+  /* La cabecera deja de ser una caja: su titulo y su barra de filtros pasan a ser
+     elementos directos del grid y se colocan por separado (ver CatalogHeader.module.css). */
   .header {
-    padding-left: var(--catalog-gutter);
+    display: contents;
   }
 
   .sidebar {
+    grid-area: auto;
+    order: 2;
     min-height: 0;
     padding: 0 var(--catalog-gutter);
-    margin-bottom: 1.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .content {
+    grid-area: auto;
+    order: 4;
     padding: 0 var(--catalog-gutter);
   }
 }

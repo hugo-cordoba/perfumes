@@ -109,3 +109,43 @@
   margin-left: auto; /* sigue a la derecha aunque no haya filtros a la izquierda */
   gap: clamp(1.25rem, 2vw, 2rem);
 }
+
+/* =====================================================================
+   Movil: el titulo y la barra de filtros se separan para que las marcas
+   (barra lateral) queden ENTRE los dos. ProductCatalog pone la envoltura
+   exterior en `display: contents` y aqui hacemos lo mismo con la interior;
+   al no haber caja, el padding lateral pasa a cada elemento.
+   Orden: titulo (1) -> marcas (2, en ProductCatalog) -> filtros (3) -> productos (4)
+   ===================================================================== */
+@media (max-width: 800px) {
+  .header[data-variant='catalog'] {
+    display: contents;
+  }
+
+  .header[data-variant='catalog'] .title {
+    order: 1;
+    padding: var(--catalog-header-pt, 1.75rem) var(--catalog-gutter, 0.75rem) 0.75rem;
+  }
+
+  .header[data-variant='catalog'] .description {
+    order: 1;
+    margin-top: 0;
+    padding: 0 var(--catalog-gutter, 0.75rem) 0.75rem;
+  }
+
+  .header[data-variant='catalog'] .toolbar {
+    order: 3;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding: 0 var(--catalog-gutter, 0.75rem);
+
+    /* Hueco mas corto entre "Hombre/Mujer" y "Ordenar por" */
+    gap: 0.5rem 0.75rem;
+
+    /* Texto de la barra: se adapta al ancho de pantalla (~10px en 320px,
+       ~11px en 375px, 12px a partir de ~410px) y lo leen GenderSelector y ProductFilters */
+    --catalog-toolbar-text: clamp(0.625rem, 2.9vw, 0.75rem);
+    --catalog-toolbar-tracking: 0.06em;
+    --catalog-toolbar-gap: 0.5rem;
+  }
+}

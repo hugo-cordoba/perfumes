@@ -34,21 +34,30 @@ export default function GenderSelector() {
     .split(',')
     .filter((value): value is GenderFilter => GENDER_FILTER_OPTIONS.some((option) => option.value === value));
 
-  // Con los dos marcados (?gender=men,women) no se filtra nada: cuenta como "ninguno".
-  const active = new Set(selected).size === 1 ? selected[0] : null;
-  const current = isPending ? target : active;
+    // Filtro REAL de la URL. Con los dos marcados (?gender=men,women) no se filtra nada: cuenta como "ninguno".
+        const active: GenderFilter | null = new Set(selected).size === 1 ? selected[0] : null;
 
-  function setGender(next: GenderFilter | null) {
+    // Lo que SE VE: siempre hay una opcion marcada, la del switch. Sin filtro, el switch esta a la izquierda (Hombre).
+    // Mientras Next carga la pagina nueva se enseña ya la opcion elegida.
+    const current: GenderFilter = (isPending ? target : active) ?? 'men';
+
+    function setGender(next: GenderFilter) {
+      // Una sola navegacion a la vez (dos router.push seguidos se pisan).
+      if (isPending) return;
+      // Pulsar la opcion que ya esta filtrada no hace nada: nunca se puede deseleccionar.
+      // Se compara con el filtro real (active), no con lo que se ve: sin filtro, pulsar
+      // "Hombre" si debe aplicar el filtro de hombres.
+      if (next === active) return;
+
     setTarget(next);
 
     const params = new URLSearchParams(searchParams.toString());
-    if (next) params.set('gender', next);
-    else params.delete('gender');
+    params.set('gender', next);
     params.delete('page'); // al cambiar de filtro volvemos a la primera pagina
     const query = params.toString();
 
     startTransition(() => {
-      router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+      router.push(`${pathname}?${query}`, { scroll: false });
     });
   }
 
@@ -57,8 +66,9 @@ export default function GenderSelector() {
       <button
         type="button"
         className={styles.label}
+        data-label={labelOf('men')}
         aria-pressed={current === 'men'}
-        onClick={() => setGender(current === 'men' ? null : 'men')}
+        onClick={() => setGender('men')}
       >
         {labelOf('men')}
       </button>
@@ -72,8 +82,9 @@ export default function GenderSelector() {
       <button
         type="button"
         className={styles.label}
+        data-label={labelOf('women')}
         aria-pressed={current === 'women'}
-        onClick={() => setGender(current === 'women' ? null : 'women')}
+        onClick={() => setGender('women')}
       >
         {labelOf('women')}
       </button>

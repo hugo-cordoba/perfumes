@@ -1,19 +1,18 @@
 .group {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--catalog-toolbar-gap, 0.75rem);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Misma tipografia que "Ordenar por" (ProductFilters) para que la barra se lea como una sola. */
 .label {
   padding: 0.35rem 0;
   border: none;
   background: transparent;
   font: inherit;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-size: var(--catalog-toolbar-text, 0.75rem);
+  font-weight: 500; /* no seleccionada: peso normal */
+  letter-spacing: var(--catalog-toolbar-tracking, 0.1em);
   text-transform: uppercase;
   color: var(--color-text-muted);
   white-space: nowrap;
@@ -21,9 +20,29 @@
   transition: color 0.18s ease;
 }
 
-.label:hover,
+/* Reserva el ancho de la versión en negrita, para que la barra no "salte"
+   al cambiar de peso (el texto en negrita es más ancho). */
+.label::after {
+  content: attr(data-label);
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* Seleccionada: negrita y color oscuro */
 .label[aria-pressed='true'] {
+  font-weight: 700;
   color: var(--color-text);
+}
+
+/* Solo con ratón, y sin tocar el peso: el hover nunca se confunde con "seleccionada" */
+@media (hover: hover) {
+  .label:not([aria-pressed='true']):hover {
+    color: var(--color-primary-light);
+  }
 }
 
 .label:focus-visible {

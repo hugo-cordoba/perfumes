@@ -197,8 +197,10 @@
   transition: color 0.18s ease;
 }
 
-.link:hover {
-  color: var(--color-text);
+@media (hover: hover) {
+  .link:hover {
+    color: var(--color-text);
+  }
 }
 
 /* Activo: negro + subrayado fino, para que no dependa solo del color */
