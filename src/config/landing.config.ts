@@ -88,7 +88,7 @@ export const landingSections: SectionConfig[] = [
     id: 'destacado',
     type: 'featureBanner',
     props: {
-      backgroundImage: '/destacado-2.webp',
+      backgroundImage: '/destacado-1.webp',
       imageAlt: 'Una colección para cada ocasión',
     },
   },
@@ -101,16 +101,14 @@ export const landingSections: SectionConfig[] = [
       viewAllHref: '/products?maxPrice=50',
     },
   },
-  {
-    id: 'destacado-2',
-    type: 'featureBanner',
-    props: {
-      title: 'Ofertas por tiempo limitado',
-      description: 'Aprovecha los descuentos de esta temporada antes de que se agoten.',
-      ctaLabel: 'Ver ofertas',
-      ctaHref: '/products?maxPrice=50',
+    {
+      id: 'destacado-2',
+      type: 'featureBanner',
+      props: {
+        backgroundImage: '/destacado-2.webp',
+        imageAlt: 'Ofertas por tiempo limitado',
+      },
     },
-  },
   {
     id: 'testimonios',
     type: 'testimonials',
