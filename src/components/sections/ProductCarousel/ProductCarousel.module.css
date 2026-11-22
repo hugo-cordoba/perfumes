@@ -1,5 +1,5 @@
 .section {
-  padding: var(--carousel-padding-y, clamp(1rem, 2.5vw, 1.75rem)) var(--carousel-padding-x, clamp(1.5rem, 5vw, 4rem));
+  padding: var(--carousel-padding-y, clamp(1rem, 2.5vw, 1.75rem)) var(--carousel-padding-x, var(--page-gutter));
   background-color: var(--carousel-bg, var(--color-background));
 }
 
@@ -126,7 +126,7 @@
      sección) y el de abajo (margin de la cabecera) usan el MISMO valor.
      Con las variables de .related, la ficha de producto sigue mandando ahí. */
   .section {
-    padding: var(--carousel-padding-y, 1.5rem) var(--carousel-padding-x, 1.25rem);
+    padding: var(--carousel-padding-y, 1.5rem) var(--carousel-padding-x, var(--page-gutter));
   }
 
   /* align-items: center -> título y "Ver todos" quedan centrados entre sí */
@@ -168,7 +168,7 @@
   /* Más aire entre filas (ahora cada tarjeta lleva nombre + precio apilados)
      y sin hueco sobrante debajo de la última fila. */
   .itemsRow {
-    gap: 1.75rem 0.75rem;
+    gap: 1.75rem 0.5rem;
     margin-bottom: var(--carousel-items-gap, 0);
   }
 

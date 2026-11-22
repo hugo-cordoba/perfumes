@@ -47,6 +47,7 @@
 .imageOnly {
   background-color: var(--color-background);
   line-height: 0;
+  padding: 0 var(--page-gutter);
 }
 
 .imageOnlyImg {
