@@ -55,11 +55,21 @@
 
 /* ---------- Texto ---------- */
 
+/* Nombre (y marca) a la izquierda, precio a la derecha. `baseline` alinea el
+   precio con la primera linea del nombre aunque este ocupe dos. */
 .info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: var(--card-info-gap);
+}
+
+.text {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  margin-top: var(--card-info-gap);
+  min-width: 0;
 }
 
 .name {
@@ -69,9 +79,12 @@
 }
 
 .price {
+  flex: 0 0 auto;
   font-size: 0.95rem;
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
 }
 
 /* ---------- Añadir a la cesta: un trazo fino, sin competir con el producto ---------- */
@@ -238,14 +251,14 @@
 }
 
 .cardWrapper[data-variant='catalog'] .price {
-  margin-top: 0.3rem;
   font-size: var(--card-text);
   font-weight: 700;
   color: var(--color-text);
 }
 
 .cardWrapper[data-variant='catalog'] .comparePrice {
-  margin-left: 0.55rem;
+  display: block;
+  margin-top: 0.15rem;
   font-weight: 500;
   color: var(--color-text-muted);
 }

@@ -98,8 +98,10 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
         {product.badge && <span className={styles.badge}>{product.badge}</span>}
       </div>
       <div className={styles.info}>
-        <p className={styles.name}>{product.name}</p>
-        {isCatalog && brand && <p className={styles.brand}>{brand}</p>}
+        <div className={styles.text}>
+          <p className={styles.name}>{product.name}</p>
+          {isCatalog && brand && <p className={styles.brand}>{brand}</p>}
+        </div>
         <p className={styles.price}>
           {isCatalog ? toDisplayPrice(product.price) : product.price}
           {isCatalog && product.compareAtPrice && (
