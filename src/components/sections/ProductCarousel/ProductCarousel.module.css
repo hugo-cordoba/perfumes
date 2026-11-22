@@ -122,22 +122,25 @@
 }
 
 @media (max-width: 640px) {
-  /* Mismas variables que ya usa .related en la ficha de producto:
-     solo cambian los valores por defecto, así que ahí no se rompe nada. */
+  /* Título centrado entre secciones: el hueco de arriba (padding de la
+     sección) y el de abajo (margin de la cabecera) usan el MISMO valor.
+     Con las variables de .related, la ficha de producto sigue mandando ahí. */
   .section {
-    padding: var(--carousel-padding-y, 2rem) var(--carousel-padding-x, 1.25rem);
+    padding: var(--carousel-padding-y, 1.5rem) var(--carousel-padding-x, 1.25rem);
   }
 
+  /* align-items: center -> título y "Ver todos" quedan centrados entre sí */
   .header {
     flex-wrap: nowrap;
-    align-items: baseline;
+    align-items: center;
     gap: 0.75rem;
-    margin-bottom: var(--carousel-header-gap, 1.25rem);
+    margin-bottom: var(--carousel-padding-y, 1.5rem);
   }
 
   /* Una sola línea siempre: el tamaño sale del ancho de pantalla,
      descontando el hueco de "Ver todos" y los márgenes laterales.
-     (375px ≈ 14px · 390px ≈ 15px · 430px ≈ 17.5px · tope 24px) */
+     (375px ≈ 14px · 390px ≈ 15px · 430px ≈ 17.5px · tope 24px)
+     Misma fórmula que el título de Testimonials: si cambias una, cambia la otra. */
   .title {
     min-width: 0;
     font-size: clamp(0.75rem, calc((100vw - 8.25rem) / 17), 1.5rem);
