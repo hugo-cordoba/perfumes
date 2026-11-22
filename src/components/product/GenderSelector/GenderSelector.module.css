@@ -1,0 +1,38 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Misma tipografia que "Ordenar por" (ProductFilters) para que la barra se lea como una sola. */
+.label {
+  padding: 0.35rem 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.label:hover,
+.label[aria-pressed='true'] {
+  color: var(--color-text);
+}
+
+.label:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .label {
+    transition: none;
+  }
+}

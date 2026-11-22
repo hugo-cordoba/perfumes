@@ -415,3 +415,7 @@
     width: 20px;
   }
 }
+
+.header[data-bordered='true'] .bar {
+  border-bottom: 1px solid #e4e4e7;
+}

@@ -52,6 +52,7 @@ export default function Header({
   const [cartBump, setCartBump] = useState(false);
   const pathname = usePathname();
   const isSearchPage = pathname === '/search';
+  const isProductsPage = pathname === '/products';
   const anyPanelOpen = searchOpen || authOpen || cartOpen;
 
   useEffect(() => {
@@ -128,7 +129,7 @@ export default function Header({
   }
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-bordered={isProductsPage}>
       <div className={styles.bar}>
         <div className={styles.side}>
           <button

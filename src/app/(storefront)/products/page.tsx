@@ -9,6 +9,7 @@ import {
 } from '@/lib/product-filters';
 import { pageSizeForColumns, paginate, parseColumnsParam, parsePageParam } from '@/lib/pagination';
 import CatalogHeader from '@/components/product/CatalogHeader/CatalogHeader';
+import GenderSelector from '@/components/product/GenderSelector/GenderSelector';
 import ProductFilters from '@/components/product/ProductFilters/ProductFilters';
 import GridDensityToggle from '@/components/product/GridDensityToggle/GridDensityToggle';
 import ProductCatalog from '@/components/product/ProductCatalog/ProductCatalog';
@@ -57,6 +58,7 @@ export default async function AllProductsPage({ searchParams }: AllProductsPageP
               variant="catalog"
               title={title}
               resultsCount={filteredProducts.length}
+              filters={<GenderSelector />}
               actions={
                 <>
                   <GridDensityToggle current={columns} />

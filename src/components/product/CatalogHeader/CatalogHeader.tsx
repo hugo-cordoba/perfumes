@@ -7,10 +7,16 @@ interface CatalogHeaderProps {
   resultsCount?: number;
   actions?: ReactNode;
   /**
+   * Solo variante `catalog`: filtros que van a la IZQUIERDA de la barra bajo el
+   * titulo (ej. el selector de genero). `actions` va a la derecha (ordenar...).
+   */
+  filters?: ReactNode;
+  /**
    * `default`: cabecera de siempre (con padding lateral propio).
    * `catalog`: para colocarla dentro de ProductCatalog con barra lateral: sin
-   * padding lateral (lo da el contenedor), titular grande en mayusculas y, a la
-   * derecha, el numero de resultados junto a las acciones (ordenar).
+   * padding lateral (lo da el contenedor), titular pequeno en mayusculas con el
+   * numero de resultados en superindice y, debajo, una barra con los filtros a
+   * la izquierda y las acciones (ordenar) a la derecha.
    */
   variant?: 'default' | 'catalog';
 }
@@ -20,6 +26,7 @@ export default function CatalogHeader({
   description,
   resultsCount,
   actions,
+  filters,
   variant = 'default',
 }: CatalogHeaderProps) {
   const countLabel =
@@ -28,20 +35,29 @@ export default function CatalogHeader({
   if (variant === 'catalog') {
     return (
       <div className={styles.header} data-variant="catalog">
-        <div className={styles.titleRow}>
-          <h1 className={styles.title}>{title}</h1>
-          {(countLabel || actions) && (
-            <div className={styles.toolbar}>
-              {countLabel && (
-                <span className={styles.toolbarCount} aria-live="polite">
-                  {countLabel}
-                </span>
-              )}
-              {actions}
-            </div>
+        <h1 className={styles.title}>
+          {title}
+          {countLabel && (
+            <>
+              {/* El numero se ve en superindice; lectores de pantalla oyen "N productos". */}
+              <sup className={styles.titleCount} aria-hidden="true">
+                {resultsCount}
+              </sup>
+              <span className={styles.srOnly} aria-live="polite">
+                {`, ${countLabel}`}
+              </span>
+            </>
           )}
-        </div>
+        </h1>
+
         {description && <p className={styles.description}>{description}</p>}
+
+        {(filters || actions) && (
+          <div className={styles.toolbar}>
+            <div className={styles.toolbarStart}>{filters}</div>
+            <div className={styles.toolbarEnd}>{actions}</div>
+          </div>
+        )}
       </div>
     );
   }
