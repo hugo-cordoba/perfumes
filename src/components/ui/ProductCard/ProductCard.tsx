@@ -103,7 +103,7 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
           {isCatalog && brand && <p className={styles.brand}>{brand}</p>}
         </div>
         <p className={styles.price}>
-          {isCatalog ? toDisplayPrice(product.price) : product.price}
+          {toDisplayPrice(product.price)}
           {isCatalog && product.compareAtPrice && (
             <s className={styles.comparePrice}>{toDisplayPrice(product.compareAtPrice)}</s>
           )}
