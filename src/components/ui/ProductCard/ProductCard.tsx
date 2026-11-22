@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ProductCardData } from '@/types/product.types';
 import { formatPrice, parsePriceToNumber } from '@/lib/currency';
 import { useCart } from '@/context/CartContext';
-import WishlistButton from '@/components/ui/WishlistButton/WishlistButton';
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
@@ -24,10 +23,50 @@ function toDisplayPrice(price: string): string {
   return formatPrice(parsePriceToNumber(price));
 }
 
+/** Bolsa con un "+" dentro: se lee como "añadir a la cesta" sin necesidad de texto. */
+function BagPlusIcon() {
+  return (
+    <svg
+      className={styles.addIcon}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5.5 8h13l-1 12h-11z" />
+      <path d="M9 8V7a3 3 0 0 1 6 0v1" />
+      <path d="M12 11.5v5M9.5 14h5" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      className={`${styles.addIcon} ${styles.checkIcon}`}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12.5l4.5 4.5L19 7.5" pathLength={1} />
+    </svg>
+  );
+}
+
 export default function ProductCard({ product, variant = 'default' }: ProductCardProps) {
   const { addItem } = useCart();
   const [justAdded, setJustAdded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
+  const resetTimer = useRef<number>();
+
+  useEffect(() => () => window.clearTimeout(resetTimer.current), []);
 
   const isCatalog = variant === 'catalog';
   const brand = product.brandLabel || product.categoryLabel;
@@ -35,7 +74,8 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
   function handleAddToCart() {
     addItem(product);
     setJustAdded(true);
-    window.setTimeout(() => setJustAdded(false), 1400);
+    window.clearTimeout(resetTimer.current);
+    resetTimer.current = window.setTimeout(() => setJustAdded(false), 1600);
   }
 
   const content = (
@@ -79,38 +119,27 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
       ) : (
         <div className={styles.card}>{content}</div>
       )}
-      <WishlistButton product={product} className={styles.wishlist} />
 
-      {/* Fuera del <Link> a propósito (mismo patrón que WishlistButton):
-          un <button> dentro de un <a> no es válido en HTML. Este wrapper
-          replica el aspect-ratio de la imagen y deja pasar los clics
-          (pointer-events: none) salvo sobre el propio botón. */}
-      <div className={styles.addToCartWrapper}>
+      {/* Fuera del <Link> a proposito: un <button> dentro de un <a> no es HTML
+          valido. El ancla replica el tamaño de la imagen (aspect-ratio) para
+          poder colocar el boton en su esquina inferior izquierda. Deja pasar
+          los clics salvo sobre el propio boton. */}
+      <div className={styles.addAnchor}>
         <button
           type="button"
-          className={`${styles.addToCartButton} ${justAdded ? styles.addToCartButtonPop : ''}`}
+          className={styles.addButton}
+          data-added={justAdded}
           onClick={handleAddToCart}
           aria-label={`Añadir ${product.name} a la cesta`}
+          title="Añadir a la cesta"
         >
-          {justAdded ? (
-            <span className={styles.addToCartConfirm}>
-              <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true">
-                <path
-                  d="M4 10.5 8 14l8-8"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Añadido
-            </span>
-          ) : (
-            'Añadir a la cesta'
-          )}
+          {justAdded ? <CheckIcon /> : <BagPlusIcon />}
         </button>
       </div>
+
+      <span className={styles.srOnly} role="status" aria-live="polite">
+        {justAdded ? `${product.name} añadido a la cesta` : ''}
+      </span>
     </div>
   );
 }

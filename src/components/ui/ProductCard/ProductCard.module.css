@@ -1,5 +1,9 @@
 .cardWrapper {
-  --card-surface: #f8f8f9;
+  /* zinc-100: el mismo gris que ya usan hover de paginacion y desplegables */
+  --card-surface: #f4f4f5;
+  /* Aire entre la imagen y el texto */
+  --card-info-gap: 0.75rem;
+
   position: relative;
   flex: 0 0 auto;
   width: var(--product-card-width, 260px);
@@ -13,6 +17,8 @@
   scroll-snap-align: start;
 }
 
+/* ---------- Imagen: el producto es lo unico que manda ---------- */
+
 .imageWrapper {
   position: relative;
   width: 100%;
@@ -22,15 +28,17 @@
   isolation: isolate;
 }
 
+/* `multiply` funde el blanco de las fotos de estudio con el gris, sin recuadro.
+   Menos padding que antes: el frasco gana tamaño ahora que no hay nada encima. */
 .image {
   object-fit: contain;
-  padding: 10% 9%;
+  padding: 8% 7%;
   mix-blend-mode: multiply;
-  transition: transform 0.4s ease;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .cardWrapper:hover .image {
-  transform: scale(1.04);
+  transform: scale(1.035);
 }
 
 .badge {
@@ -45,130 +53,140 @@
   font-weight: 500;
 }
 
+/* ---------- Texto ---------- */
+
 .info {
-  margin-top: 0.75rem;
   display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: var(--card-info-gap);
 }
 
 .name {
   font-size: 0.95rem;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .price {
   font-size: 0.95rem;
   color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
-.addToCartWrapper {
+/* ---------- Añadir a la cesta: un trazo fino, sin competir con el producto ---------- */
+
+.addAnchor {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   aspect-ratio: 1 / 1.2;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
   pointer-events: none;
   z-index: 2;
 }
 
-.addToCartButton {
+/* Chip blanco en la esquina inferior izquierda de la imagen: ahi casi nunca
+   hay producto (el frasco va centrado), asi que no lo tapa. */
+.addButton {
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.6rem;
   pointer-events: auto;
-  width: 100%;
-  padding: 0.85rem 1rem;
-  border: none;
-  background-color: var(--color-primary);
-  color: var(--color-background);
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-align: center;
+  display: grid;
+  place-items: center;
+  width: var(--card-add-size, 2rem);
+  height: var(--card-add-size, 2rem);
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background-color: var(--color-background);
+  color: var(--color-text);
   cursor: pointer;
-  opacity: 0;
-  transform: translateY(60px);
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
-.cardWrapper:hover .addToCartButton,
-.addToCartButton:focus-visible,
-.addToCartButtonPop {
-  opacity: 1;
-  transform: translateY(0);
+/* Zona tactil de ~43px sin agrandar el boton visible */
+.addButton::after {
+  content: '';
+  position: absolute;
+  inset: -0.35rem;
 }
 
-.addToCartButton:hover {
-  background-color: var(--color-primary-light);
+.addButton:hover,
+.addButton:focus-visible,
+.addButton[data-added='true'] {
+  background-color: var(--color-text);
+  color: var(--color-background);
 }
 
-.addToCartConfirm {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+.addButton:active {
+  transform: scale(0.94);
 }
 
-@keyframes cardAddToCartPop {
-  0% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(0) scale(1.04); }
-  100% { transform: translateY(0) scale(1); }
+.addIcon {
+  display: block;
+  width: var(--card-add-icon, 1.1rem);
+  height: var(--card-add-icon, 1.1rem);
 }
 
-.addToCartButtonPop {
-  animation: cardAddToCartPop 0.35s ease;
+/* Confirmacion: el check se dibuja una vez (responde al clic, no decora) */
+.checkIcon path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: addCheckDraw 0.32s ease-out forwards;
+}
+
+@keyframes addCheckDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .addToCartButton {
+  .image,
+  .addButton {
     transition: none;
   }
-  .addToCartButtonPop {
-    animation: none;
-  }
-}
 
-/* Sin hover en tactil: el botón queda siempre visible */
-@media (max-width: 640px) {
-  .addToCartButton {
-    opacity: 1;
-    transform: translateY(0);
+  .cardWrapper:hover .image {
+    transform: none;
+  }
+
+  .addButton:active {
+    transform: none;
+  }
+
+  .checkIcon path {
+    animation: none;
+    stroke-dashoffset: 0;
   }
 }
 
 /* =====================================================================
    Variante "catalog" (listado con barra lateral)
    Todo cuelga de [data-variant='catalog'], asi que la tarjeta de los
-   carruseles, banners y lista de deseos no cambia.
+   carruseles, banners y lista de deseos no cambia de tipografia.
    ===================================================================== */
 
 .cardWrapper[data-variant='catalog'] {
   --card-text: var(--catalog-text, clamp(0.78rem, 0.675rem + 0.17vw, 0.875rem));
+  --card-info-gap: 0.9rem;
 
   width: 100%;
   font-family: var(--font-sans), system-ui, sans-serif;
-}
-
-/* Imagen: producto entero y centrado sobre gris. `multiply` hace que el
-   blanco de las fotos de estudio se funda con el fondo en vez de verse
-   como un recuadro blanco. */
-.cardWrapper[data-variant='catalog'] .imageWrapper {
-  background-color: var(--card-surface);
-  isolation: isolate;
-}
-
-.cardWrapper[data-variant='catalog'] .image {
-  object-fit: contain;
-  padding: 10% 9%;
-  mix-blend-mode: multiply;
-  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.cardWrapper[data-variant='catalog']:hover .image {
-  transform: scale(1.035);
 }
 
 .cardWrapper[data-variant='catalog'] .noImage {
@@ -197,14 +215,6 @@
   text-transform: uppercase;
 }
 
-/* Texto: nombre / marca / precio apilados y alineados a la izquierda */
-.cardWrapper[data-variant='catalog'] .info {
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.2rem;
-  margin-top: 0.9rem;
-}
-
 .cardWrapper[data-variant='catalog'] .name {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -231,7 +241,6 @@
   margin-top: 0.3rem;
   font-size: var(--card-text);
   font-weight: 700;
-  font-variant-numeric: tabular-nums;
   color: var(--color-text);
 }
 
@@ -239,57 +248,4 @@
   margin-left: 0.55rem;
   font-weight: 500;
   color: var(--color-text-muted);
-}
-
-/* Favoritos: aparece al pasar el raton (siempre visible si ya es favorito
-   o si el dispositivo no tiene hover) para no llenar la rejilla de corazones. */
-.cardWrapper[data-variant='catalog'] .wishlist {
-  top: 0.75rem;
-  right: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.92);
-  opacity: 0;
-  transition: opacity 0.25s ease, transform 0.15s ease, background-color 0.2s ease, color 0.2s ease;
-}
-
-.cardWrapper[data-variant='catalog']:hover .wishlist,
-.cardWrapper[data-variant='catalog']:focus-within .wishlist,
-.cardWrapper[data-variant='catalog'] .wishlist[aria-pressed='true'] {
-  opacity: 1;
-}
-
-/* Boton de añadir: barra negra a todo el ancho de la imagen */
-.cardWrapper[data-variant='catalog'] .addToCartButton {
-  padding: var(--card-button-pad, 1.05rem 1rem);
-  font-family: inherit;
-  font-size: var(--card-button-text, 0.75rem);
-  letter-spacing: var(--card-button-tracking, 0.12em);
-}
-
-/* Tactil / pantallas estrechas: no hay hover, asi que favorito y boton de
-   añadir se ven siempre. El boton pasa a una barra clara y compacta para que
-   ocho barras negras no dominen la rejilla. */
-@media (hover: none), (max-width: 640px) {
-  .cardWrapper[data-variant='catalog'] .wishlist {
-    opacity: 1;
-  }
-
-  .cardWrapper[data-variant='catalog'] .addToCartButton {
-    padding: var(--card-button-pad, 0.7rem 0.5rem);
-    background-color: rgba(24, 24, 27, 0.88);
-    font-size: var(--card-button-text, 0.625rem);
-    letter-spacing: var(--card-button-tracking, 0.1em);
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cardWrapper[data-variant='catalog'] .image,
-  .cardWrapper[data-variant='catalog'] .wishlist {
-    transition: none;
-  }
-
-  .cardWrapper[data-variant='catalog']:hover .image {
-    transform: none;
-  }
 }
