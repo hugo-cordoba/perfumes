@@ -2,8 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { Grid2x2, Grid3x3, Square, type LucideIcon } from 'lucide-react';
 import { DEFAULT_GRID_COLUMNS, GRID_COLUMN_OPTIONS, type GridColumns } from '@/lib/pagination';
 import styles from './GridDensityToggle.module.css';
+
+/** Cada densidad (perfumes por fila) con su icono: cuantos más por fila, más cuadrícula. */
+const COLUMN_ICONS: Record<GridColumns, LucideIcon> = {
+  2: Square,
+  4: Grid2x2,
+  8: Grid3x3,
+};
 
 export default function GridDensityToggle({ current }: { current: GridColumns }) {
   const pathname = usePathname();
@@ -20,12 +28,10 @@ export default function GridDensityToggle({ current }: { current: GridColumns })
 
   return (
     <div className={styles.toggle} role="group" aria-label="Perfumes por fila">
-      <span className={styles.label} aria-hidden="true">
-        Por fila
-      </span>
       <ul className={styles.list}>
         {GRID_COLUMN_OPTIONS.map((columns) => {
           const isActive = columns === current;
+          const Icon = COLUMN_ICONS[columns];
           return (
             <li key={columns}>
               <Link
@@ -35,7 +41,7 @@ export default function GridDensityToggle({ current }: { current: GridColumns })
                 aria-current={isActive ? 'true' : undefined}
                 aria-label={`${columns} perfumes por fila`}
               >
-                {columns}
+                <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
               </Link>
             </li>
           );
