@@ -201,3 +201,31 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
+@media (max-width: 640px) {
+  .section {
+    padding: 2rem 0 3rem;
+  }
+
+  .header {
+    margin-bottom: 1.25rem;
+    padding: 0 1.25rem;
+  }
+
+  /* Antes: 1.4rem fijo con nowrap, y "¿Qué opinan nuestros clientes?"
+     medía ~340px en un móvil de 375px, así que se cortaba por los lados. */
+  .title {
+    font-size: min(5.2vw, 1.4rem);
+  }
+
+  .reviewCta {
+    margin-top: 1.5rem;
+    padding: 0 1.25rem;
+  }
+
+  .reviewButton {
+    gap: 0.5rem;
+    padding: 0.8rem 1.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}

@@ -262,3 +262,35 @@
   font-weight: 500;
   color: var(--color-text-muted);
 }
+
+@media (max-width: 640px) {
+  .cardWrapper[data-variant='default'] {
+    /* Evita que un nombre largo ensanche la columna de la rejilla */
+    min-width: 0;
+    --card-info-gap: 0.625rem;
+  }
+
+  /* Nombre arriba, precio debajo: cada uno en su línea y sin chocar
+     con el texto de la tarjeta de al lado. */
+  .cardWrapper[data-variant='default'] .info {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.25rem;
+  }
+
+  .cardWrapper[data-variant='default'] .name {
+    overflow: hidden;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cardWrapper[data-variant='default'] .price {
+    font-size: 0.8125rem;
+    text-align: left;
+  }
+}
